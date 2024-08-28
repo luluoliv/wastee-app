@@ -19,6 +19,7 @@ interface ButtonProps {
     textStyle?: StyleProp<TextStyle>;
     loading?: boolean;
     icon?: keyof typeof FontAwesome.glyphMap;
+    disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -28,12 +29,13 @@ const Button: React.FC<ButtonProps> = ({
     textStyle,
     loading,
     icon,
+    disabled
 }) => {
     return (
         <TouchableOpacity
             style={[styles.button, style]}
             onPress={onPress}
-            disabled={loading}
+            disabled={loading || disabled}
         >
             <View style={styles.content}>
                 {loading && (

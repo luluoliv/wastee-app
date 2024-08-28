@@ -5,6 +5,7 @@ import { View, Image, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 
 import Button from "@/src/components/button";
+import Title from "@/src/components/title";
 
 const robot = require("../assets/images/robot.png");
 
@@ -15,9 +16,7 @@ export default function Initial() {
         <View style={tw`flex-1 justify-center items-center bg-gray-900`}>
             <View style={tw`flex-1 justify-center items-center gap-y-12`}>
                 <Image source={robot} style={tw`w-32 h-32`} />
-                <Text style={[tw`text-blue-500 text-4xl`, styles.text]}>
-                    Wastee
-                </Text>
+                <Title/>
             </View>
             <View style={tw`w-full flex-col justify-center gap-y-2 p-4`}>
                 <Button

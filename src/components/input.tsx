@@ -8,6 +8,7 @@ interface InputProps extends TextInputProps {
   containerStyle?: ViewStyle;
   labelStyle?: TextStyle;
   errorStyle?: TextStyle;
+  required?: boolean
 }
 
 const Input: React.FC<InputProps> = ({
@@ -16,14 +17,20 @@ const Input: React.FC<InputProps> = ({
   containerStyle,
   labelStyle,
   errorStyle,
+  required,
   ...props
 }) => {
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
-      <TextInput style={styles.input} {...props} />
-      {errorMessage && <Text style={[styles.error, errorStyle]}>{errorMessage}</Text>}
-    </View>
+    {label && (
+      <Text style={[styles.label, labelStyle]}>
+        {label}
+        {required && <Text style={styles.requiredIndicator}>*</Text>}
+      </Text>
+    )}
+    <TextInput style={styles.input} {...props} />
+    {errorMessage && <Text style={[styles.error, errorStyle]}>{errorMessage}</Text>}
+  </View>
   );
 };
 
@@ -45,6 +52,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 20,
     paddingVertical: 26,
+  },
+  requiredIndicator: {
+    color: 'red',
+    fontSize: 16,
+    marginLeft: 4,
   },
   error: {
     color: 'red',

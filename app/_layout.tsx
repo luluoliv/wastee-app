@@ -16,7 +16,7 @@ import "../src/styles/output.css";
 
 export default function RootLayout() {
     const [fontsLoaded] = useFonts({
-        Poppins_400Regular,
+        Poppins_400Regular, 
         Poppins_500Medium,
         Poppins_600SemiBold,
         Poppins_600SemiBold_Italic,
@@ -35,6 +35,8 @@ export default function RootLayout() {
             >
                 <Stack.Screen name="Splash" />
                 <Stack.Screen name="Initial" />
+                <Stack.Screen name="Register" />
+                <Stack.Screen name="Confirm" />
             </Stack>
         </>
     );
