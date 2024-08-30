@@ -80,7 +80,7 @@ const Register = () => {
         <Button disabled={!isValid} onPress={handleSubmit(onSubmit)} title="Continuar" />
 
         <Text style={tw`text-gray-600 text-center`}>
-          Já possui conta?
+          Já possui conta?{" "}
           <Text style={tw`text-white`} onPress={() => router.replace("/login")}>
             Login
           </Text>

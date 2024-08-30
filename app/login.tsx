@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet } from "react-native";
+import { useRouter } from "expo-router";
 import React from "react";
 import tw from "twrnc";
 
 import Button from "@/src/components/button";
 import Input from "@/src/components/input";
-import { useRouter } from "expo-router";
 import Title from "@/src/components/title";
 
 const Login = () => {
@@ -22,8 +22,7 @@ const Login = () => {
           <Text
             style={tw`text-white`}
             onPress={() => router.replace("/register")}
-          >
-            Cadastre-se
+          >{" "}Cadastre-se
           </Text>
         </Text>
       </View>
