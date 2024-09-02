@@ -30,13 +30,14 @@ export default function RootLayout() {
         <>
             <StatusBar style="dark" />
             <Stack
-                initialRouteName="Splash"
+                initialRouteName="index"
                 screenOptions={{ headerShown: false }}
             >
-                <Stack.Screen name="Splash" />
-                <Stack.Screen name="Initial" />
-                <Stack.Screen name="Register" />
-                <Stack.Screen name="Confirm" />
+                <Stack.Screen name="index" />
+                <Stack.Screen name="initial" />
+                <Stack.Screen name="register" />
+                <Stack.Screen name="confirm" />
+                <Stack.Screen name="home" />
             </Stack>
         </>
     );

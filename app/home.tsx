@@ -9,7 +9,7 @@ import Title from "@/src/components/title";
 
 const robot = require("../assets/images/robot.png");
 
-export default function Initial() {
+export default function Home() {
     const router = useRouter();
 
     return (
