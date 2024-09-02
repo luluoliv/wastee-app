@@ -34,8 +34,16 @@ Wastee proporciona uma interface intuitiva para conectar compradores e vendedore
 
 3. Desenvolvimento: Edite os arquivos no diretório app. O projeto usa file-based routing.
 
-## Recursos Adicionais
+## Preview
+   - Samuel Lopes (Linkedin)[https://www.linkedin.com/in/samuel-llopes]
 
+## Design Por
+   - Luara Lima Oliveira
+   - Kemilly Gomes
+   - Nicolly Lima
+   - Nicolas Rodrigues
+   - Gabriel Vaz Franco
+   - Pedro Henrique Silva
 
 ## Criado Por
    - Luara Lima Oliveira
