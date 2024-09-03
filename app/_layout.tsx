@@ -37,7 +37,7 @@ export default function RootLayout() {
                 <Stack.Screen name="initial" />
                 <Stack.Screen name="register" />
                 <Stack.Screen name="confirm" />
-                <Stack.Screen name="home" />
+                <Stack.Screen name="(tabs)" />
             </Stack>
         </>
     );
