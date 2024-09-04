@@ -16,6 +16,7 @@
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.2.3",
     "@expo/vector-icons": "^14.0.2",
+    "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.0.2",
     "autoprefixer": "^10.4.20",
     "expo": "~51.0.28",

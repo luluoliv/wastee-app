@@ -1,11 +1,12 @@
 import React from "react";
 import { Tabs } from "expo-router";
-import { Home, ThumbsUp, Plus, MessageCircle, User } from "lucide-react";
+import { Feather } from "@expo/vector-icons";
 
-export default function Navbar() {
+export default function TabLayout() {
   return (
     <Tabs
-      screenOptions={({ route }) => ({
+      initialRouteName="home"
+      screenOptions={() => ({
         headerShown: false,
         tabBarActiveTintColor: "white",
         tabBarStyle: {
@@ -15,45 +16,70 @@ export default function Navbar() {
         tabBarLabelStyle: {
           display: "none",
         },
-        tabBarIcon: ({ focused, color, size }) => {
-          let IconComponent;
-
-          switch (route.name) {
-            case "home":
-              IconComponent = Home;
-              break;
-            case "liked":
-              IconComponent = ThumbsUp;
-              break;
-            case "add":
-              IconComponent = Plus;
-              break;
-            case "messages":
-              IconComponent = MessageCircle;
-              break;
-            case "perfil":
-              IconComponent = User;
-              break;
-            default:
-              IconComponent = null;
-              break;
-          }
-
-          return IconComponent ? (
-            <IconComponent
-              fill={focused ? "white" : null}
-              color={color}
-              size={size}
-            />
-          ) : null;
-        },
       })}
     >
-      <Tabs.Screen name="home" />
-      <Tabs.Screen name="liked" />
-      <Tabs.Screen name="add" />
-      <Tabs.Screen name="messages" />
-      <Tabs.Screen name="perfil" />
+      <Tabs.Screen
+        name="home"
+        options={{
+          tabBarIcon: ({ focused, color }) => (
+            <Feather
+              fill={focused ? "white" : ""}
+              size={28}
+              name="home"
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="liked"
+        options={{
+          tabBarIcon: ({ focused, color }) => (
+            <Feather
+              fill={focused ? "white" : ""}
+              size={24}
+              name="heart"
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="add"
+        options={{
+          tabBarIcon: ({ focused, color }) => (
+            <Feather
+              fill={focused ? "white" : ""}
+              size={24}
+              name="plus-circle"
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="messages"
+        options={{
+          tabBarIcon: ({ focused, color }) => (
+            <Feather
+              fill={focused ? "white" : ""}
+              size={24}
+              name="message-circle"
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen name="perfil"  options={{
+          tabBarIcon: ({ focused, color }) => (
+            <Feather
+              fill={focused ? "white" : ""}
+              size={24}
+              name="user"
+              color={color}
+            />
+          ),
+        }} />
     </Tabs>
   );
 }
