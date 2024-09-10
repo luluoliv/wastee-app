@@ -1,6 +1,8 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { ItemData } from './items'; // Adjust the path as needed
+import React from "react";
+import { View, Text, Image, TouchableOpacity } from "react-native";
+import { ItemData } from "./items";
+import tw from "twrnc";
+import { Feather } from "@expo/vector-icons";
 
 interface ItemProps {
   data: ItemData;
@@ -8,102 +10,64 @@ interface ItemProps {
 
 const Item: React.FC<ItemProps> = ({ data }) => {
   const handleClassificationPress = () => {
-    console.log('Classification pressed');
+    console.log("Classification pressed");
   };
 
   const handleOptionsPress = () => {
-    console.log('Options pressed');
+    console.log("Options pressed");
   };
 
+  const hasDiscount = !!data.discountedPrice;
+
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
+    <View style={tw`w-1/2 p-2`}>
+      <View style={tw`relative w-full`}>
         <Image
           source={{ uri: data.imageUrl }}
-          style={styles.image}
+          style={tw`w-[168px] h-[168px] rounded-lg`}
           resizeMode="cover"
         />
-        <TouchableOpacity style={styles.classificationButton} onPress={handleClassificationPress}>
-          <Text style={styles.classificationText}>★</Text>
+        <TouchableOpacity
+          style={tw`absolute flex-row gap-x-1 bottom-2 left-2 bg-[#0C0C11A3] bg-opacity-50 p-1 rounded`}
+          onPress={handleClassificationPress}
+        >
+          <Text style={tw`text-white text-xs`}>★</Text>
+          {data.rate && (
+            <Text style={tw`text-white text-xs ml-1`}>{data.rate}</Text>
+          )}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.optionsButton} onPress={handleOptionsPress}>
-          <Text style={styles.optionsText}>⋮</Text>
+        <TouchableOpacity
+          style={tw`absolute top-2 rounded-full right-2 bg-black bg-opacity-50 p-1`}
+          onPress={handleOptionsPress}
+        >
+          <Feather name="more-horizontal" size={24} color="white" />
         </TouchableOpacity>
       </View>
-      <View style={styles.detailsContainer}>
-        <Text style={styles.title}>{data.title}</Text>
-        <Text style={styles.discountedPrice}>{data.discountedPrice}</Text>
-        <Text style={styles.originalPrice}>{data.originalPrice}</Text>
-        <Text style={styles.seller}>{data.seller}</Text>
+      <View style={tw`space-y-2 mt-2`}>
+        <Text style={tw`text-sm font-medium text-[#DFE6F5]`}>
+          {data.title}
+        </Text>
+        <View style={tw`flex-row gap-x-1 items-center`}>
+          <Text
+            style={[
+              tw`text-sm font-semibold`,
+              hasDiscount ? tw`text-[#FB923C]` : tw`text-[#FBFCFF]`
+            ]}
+          >
+            {data.originalPrice}
+          </Text>
+          {hasDiscount && (
+            <Text style={tw`text-sm font-semibold text-[#787F8D] line-through`}>
+              {data.discountedPrice}
+            </Text>
+          )}
+        </View>
+        <Text style={tw`text-sm text-[#787F8D]`}>
+          {data.seller}
+        </Text>
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: '50%',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  imageContainer: {
-    position: 'relative',
-    width: '100%',
-    height: 100,
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-  },
-  classificationButton: {
-    position: 'absolute',
-    bottom: 10,
-    left: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 5,
-    borderRadius: 5,
-  },
-  classificationText: {
-    color: 'white',
-    fontSize: 16,
-  },
-  optionsButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 5,
-    borderRadius: 5,
-  },
-  optionsText: {
-    color: 'white',
-    fontSize: 18,
-  },
-  detailsContainer: {
-    marginTop: 10,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  discountedPrice: {
-    fontSize: 18,
-    color: 'green',
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  originalPrice: {
-    fontSize: 14,
-    textDecorationLine: 'line-through',
-    color: 'red',
-    marginBottom: 5,
-  },
-  seller: {
-    fontSize: 14,
-    color: '#555',
-  },
-});
 
 export default Item;

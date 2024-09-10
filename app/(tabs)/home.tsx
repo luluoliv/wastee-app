@@ -37,7 +37,7 @@ export default function Home() {
                 data={items}
                 renderItem={({ item }) => <Item key={item.id} data={item} />}
                 keyExtractor={(item) => item.id}
-                contentContainerStyle={tw`p-4`}
+                contentContainerStyle={tw`p-2`}
                 numColumns={2}
             />
         </View>
