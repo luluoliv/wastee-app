@@ -57,7 +57,6 @@ const Input: FC<InputProps> = forwardRef(
 
         const errorMessage = typeof error === "string" ? error : error?.message;
 
-        // Use inline styles for dynamic colors
         const borderColor =
             focused && !error
                 ? COLORS.primary.DEFAULT

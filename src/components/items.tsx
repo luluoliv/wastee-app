@@ -1,65 +1,57 @@
+export interface Comment {
+  user: string;
+  comment: string;
+  date: string;
+}
+
 export interface ItemData {
-  imageUrl: string;
+  id: string;
+  images: string[];
   title: string;
   originalPrice: string;
   discountedPrice?: string;
   rate?: string;
   seller: string;
+  description: string;
+  comments?: Comment[];
+  category?: string;
 }
 
-export const items = [
+export const items: ItemData[] = [
   {
     id: "1",
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTALQl2ZpY7MusyQ-M-WXgG_LPT95bMivC9jw&s",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTALQl2ZpY7MusyQ-M-WXgG_LPT95bMivC9jw&s",
+      "https://via.placeholder.com/400x300?text=Imagem+2",
+    ],
     title: "Smartphone EcoSmart Recondicionado",
     originalPrice: "R$599,90",
     discountedPrice: "",
     rate: "4.2",
     seller: "João Silva",
+    category: "Smartphones",
+    description: "Um smartphone recondicionado com excelente desempenho e bateria duradoura.",
+    comments: [
+      { user: "Ana", comment: "Ótimo custo-benefício!", date: "2024-09-10" },
+      { user: "Carlos", comment: "Chegou em perfeito estado.", date: "2024-09-11" },
+    ],
   },
   {
     id: "2",
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPSGuWGjnjBVG2_nkhMG80QrhKPy8MrqXpLA&s",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPSGuWGjnjBVG2_nkhMG80QrhKPy8MrqXpLA&s",
+      "https://via.placeholder.com/400x300?text=Imagem+2",
+    ],
     title: "Smartphone EcoSmart 2023",
     originalPrice: "R$699,90",
     discountedPrice: "",
     rate: "4.3",
-
+    category: "Smartphones",
     seller: "Maria Oliveira",
-  },
-  {
-    id: "3",
-    imageUrl: "https://images.samsung.com/is/image/samsung/p6pim/br/2401/gallery/br-galaxy-s24-490026-sm-s921blbkzto-thumb-539372346",
-    title: "Smartphone EcoSmart Pro",
-    originalPrice: "R$799,90",
-    discountedPrice: "",
-    rate: "5.0",
-    seller: "Pedro Souza",
-  },
-  {
-    id: "4",
-    imageUrl: "https://samsungbrshop.vtexassets.com/arquivos/ids/187513/SM-A536_Galaxy-A53-5G_Awesome-Black_Front.jpg?v=637838195729130000",
-    title: "Smartphone EcoSmart Pro",
-    originalPrice: "R$799,90",
-    discountedPrice: "R$649,90",
-    rate: "2.2",
-    seller: "Pedro Souza",
-  },
-  {
-    id: "5",
-    imageUrl: "https://via.placeholder.com/150?text=Item+3",
-    title: "Smartphone EcoSmart Pro",
-    originalPrice: "R$799,90",
-    discountedPrice: "R$649,90",
-    seller: "Pedro Souza",
-  },
-  {
-    id: "6",
-    imageUrl: "https://via.placeholder.com/150?text=Item+3",
-    title: "Smartphone EcoSmart Pro",
-    originalPrice: "R$799,90",
-    discountedPrice: "R$649,90",
-    rate: "1.0",
-    seller: "Pedro Souza",
+    description: "O modelo 2023 do EcoSmart, com as mais recentes inovações tecnológicas.",
+    comments: [
+      { user: "João", comment: "Muito bom, recomendo.", date: "2024-09-09" },
+      { user: "Laura", comment: "Excelente qualidade!", date: "2024-09-11" },
+    ],
   },
 ];

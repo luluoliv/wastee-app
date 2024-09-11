@@ -11,8 +11,12 @@ import Title from "@/src/components/title";
 const Login = () => {
   const router = useRouter();
 
-  const { control, handleSubmit, formState: { errors } } = useForm();
-  console.log('Control:', control, errors);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  console.log("Control:", control, errors);
 
   const onSubmit = (data: any) => {
     console.log(data);
@@ -26,21 +30,13 @@ const Login = () => {
         <Controller
           name="email"
           control={control}
-          render={({ field }) => (
-            <Input
-              label="E-mail"
-              {...field}
-            />
-          )}
+          render={({ field }) => <Input control={control} label="E-mail" {...field} />}
         />
         <Controller
           name="password"
           control={control}
           render={({ field }) => (
-            <Input
-              label="Senha"
-              {...field}
-            />
+            <Input control={control} label="Senha" {...field} />
           )}
         />
         <Button onPress={handleSubmit(onSubmit)} title="Entrar" />

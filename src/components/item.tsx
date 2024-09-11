@@ -23,7 +23,7 @@ const Item: React.FC<ItemProps> = ({ data }) => {
     <View style={tw`w-1/2 p-2`}>
       <View style={tw`relative w-full`}>
         <Image
-          source={{ uri: data.imageUrl }}
+          source={{ uri: data.images[0] }}
           style={tw`w-[168px] h-[168px] rounded-lg`}
           resizeMode="cover"
         />
@@ -43,7 +43,7 @@ const Item: React.FC<ItemProps> = ({ data }) => {
           <Feather name="more-horizontal" size={24} color="white" />
         </TouchableOpacity>
       </View>
-      <View style={tw`space-y-2 mt-2`}>
+      <View style={tw`mt-2`}>
         <Text style={tw`text-sm font-medium text-[#DFE6F5]`}>
           {data.title}
         </Text>
