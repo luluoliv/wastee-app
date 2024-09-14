@@ -3,7 +3,8 @@ module.exports = {
   content: [
     "./App.{js,jsx,ts,tsx}",
     "./app/**/*.{js,jsx,ts,tsx}",
-    "./node_modules/nativewind/**/*.js",
+    "./node_modules/twrnc/**/*.js",
+     "./src/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
     extend: {
@@ -12,7 +13,7 @@ module.exports = {
           DEFAULT: '#3573FB',
           light: '#FB923C',
           dark: '#EF4444',
-        },
+        },        
         blue: {
           DEFAULT: '#3573FB',
           '20': '#DCE4F9',

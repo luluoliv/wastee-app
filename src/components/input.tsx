@@ -5,16 +5,19 @@ import {
     Text,
     TextInputProps,
     LayoutChangeEvent,
-    StyleSheet,
+    Animated,
+    TouchableOpacity,
 } from "react-native";
-import tw from "twrnc";
+import tw from "@/src/lib/tailwind";
 import {
     useController,
     UseControllerProps,
     FieldError,
     Control,
+    FieldErrorsImpl,
+    Merge,
 } from "react-hook-form";
-import { COLORS } from "../utils/Colors";
+import { Feather } from "@expo/vector-icons";
 
 export interface InputProps
     extends Omit<TextInputProps, "defaultValue">,
@@ -24,7 +27,11 @@ export interface InputProps
     leftSideContent?: React.ReactNode;
     defaultValue?: string;
     rightSideContent?: React.ReactNode;
-    error?: FieldError;
+    error?:
+        | string
+        | FieldError
+        | Merge<FieldError, FieldErrorsImpl<any>>
+        | undefined;
     control: Control<any>;
 }
 
@@ -35,17 +42,31 @@ const Input: FC<InputProps> = forwardRef(
     ) => {
         const [focused, setFocused] = useState(false);
         const [inputHeight, setInputHeight] = useState(0);
+        const [labelPosition] = useState(new Animated.Value(0));
+        const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-        const { name, rules, defaultValue } = props;
+        const { name, rules, defaultValue, secureTextEntry } = props;
         const { field } = useController({ name, control, rules, defaultValue });
 
         const handleFocus = () => {
             setFocused(true);
+            Animated.timing(labelPosition, {
+                toValue: -25,
+                duration: 200,
+                useNativeDriver: true,
+            }).start();
         };
 
         const handleBlur = () => {
             setFocused(false);
             field.onBlur();
+            if (!field.value) {
+                Animated.timing(labelPosition, {
+                    toValue: 0,
+                    duration: 200,
+                    useNativeDriver: true,
+                }).start();
+            }
         };
 
         const measureInput = (e: LayoutChangeEvent) => {
@@ -55,31 +76,50 @@ const Input: FC<InputProps> = forwardRef(
             }
         };
 
-        const errorMessage = typeof error === "string" ? error : error?.message;
-
-        const borderColor =
-            focused && !error
-                ? COLORS.primary.DEFAULT
-                : !!error
-                ? COLORS.red.DEFAULT
-                : COLORS.grayscale[60];
-
-        const placeholderColor = COLORS.grayscale[60];
-        const textColor = COLORS.grayscale[100];
+        const errorMessage =
+            typeof error === "string"
+                ? error
+                : error && "message" in error
+                ? error.message
+                : "";
 
         return (
-            <>
+            <View style={tw`w-full`}>
                 <View
-                    style={[
-                        tw`w-full flex flex-row items-center border rounded-lg p-2.5`,
-                        { borderColor },
-                    ]}
+                    style={tw.style(
+                        "w-full flex flex-row items-center border rounded-lg p-4",
+                        focused && !error
+                            ? "border-primary"
+                            : error
+                            ? "border-red-500"
+                            : "border-grayscale-60"
+                    )}
                 >
                     {leftSideContent ? (
                         <View style={tw`pr-2.5 justify-center text-sm`}>
                             {leftSideContent}
                         </View>
                     ) : null}
+                    <Animated.Text
+                        style={tw.style(
+                            "absolute left-3 text-grayscale-60",
+                            {
+                                transform: [
+                                    {
+                                        translateY: labelPosition,
+                                    },
+                                ],
+                            },
+                            focused || field.value
+                                ? "text-primary text-sm bg-grayscale-20"
+                                : error
+                                ? "text-red-500 text-sm bg-grayscale-20"
+                                : "text-grayscale-60 text-base"
+                        )}
+                    >
+                        {label}
+                    </Animated.Text>
+
                     <TextInput
                         {...props}
                         ref={ref}
@@ -87,27 +127,34 @@ const Input: FC<InputProps> = forwardRef(
                         onChangeText={field.onChange}
                         onBlur={handleBlur}
                         onFocus={handleFocus}
-                        style={[
-                            tw`w-full bg-transparent`,
-                            { color: textColor },
-                        ]}
-                        placeholderTextColor={placeholderColor}
+                        style={tw`w-full bg-transparent text-grayscale-100`}
                         value={field.value}
+                        secureTextEntry={secureTextEntry && !isPasswordVisible}
                     />
-                    {rightSideContent ? (
-                        <View style={tw`pl-2 justify-center text-sm`}>
-                            {rightSideContent}
+                    {rightSideContent || secureTextEntry ? (
+                        <View
+                            style={tw`absolute right-3 transform -translate-y-1/2`}
+                        >
+                            <TouchableOpacity
+                                onPress={() =>
+                                    setIsPasswordVisible((prev) => !prev)
+                                }
+                            >
+                                <Feather
+                                    name={isPasswordVisible ? "eye" : "eye-off"}
+                                    size={20}
+                                    color={tw.color("text-grayscale-60")}
+                                />
+                            </TouchableOpacity>
                         </View>
                     ) : null}
                 </View>
                 {errorMessage ? (
-                    <Text
-                        style={tw`text-red-600 text-base self-center pt-2 font-light`}
-                    >
+                    <Text style={tw`text-red-600 text-xs pt-2 font-light`}>
                         {errorMessage}
                     </Text>
                 ) : null}
-            </>
+            </View>
         );
     }
 );

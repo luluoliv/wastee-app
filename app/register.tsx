@@ -1,93 +1,107 @@
 import React from "react";
-import { View, Text } from "react-native";
-import { useRouter } from "expo-router";
+import { View, Text, Image } from "react-native";
 import { useForm, Controller } from "react-hook-form";
-import tw from "twrnc";
+import { useRouter } from "expo-router";
 
+import tw from "@/src/lib/tailwind";
 import Button from "@/src/components/button";
 import Input from "@/src/components/input";
-import Title from "@/src/components/title";
+import { blurBottom } from "@/src/utils/imports";
 
 const Register = () => {
-  const router = useRouter();
+    const router = useRouter();
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm({
-    defaultValues: {
-      fullName: "",
-      email: "",
-    },
-    mode: 'onChange'
-  });
+    const {
+        control,
+        handleSubmit,
+        formState: { errors, isValid },
+    } = useForm({
+        defaultValues: {
+            fullName: "",
+            email: "",
+        },
+        mode: "onChange",
+    });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-    router.replace("/confirm");
-  };
+    const onSubmit = (data: any) => {
+        console.log(data);
+        router.replace("/confirm");
+    };
 
-  return (
-    <View style={tw`flex-1 justify-center items-center bg-gray-900`}>
-      <Title />
+    return (
+        <View style={tw`flex-1 pt-20 gap-y-20 bg-grayscale-20`}>
+            <Image
+                source={blurBottom}
+                style={tw`absolute bottom-0 left-0 right-0 h-1/4`}
+                resizeMode="cover"
+            />
 
-      <Text style={tw`text-md text-white`}>Crie sua conta Wastee.</Text>
+            <Text
+                style={tw`text-center text-primary text-3xl font-bold italic`}
+            >
+                Wastee
+            </Text>
+            <Text
+                style={tw`text-center text-xl font-medium text-grayscale-100`}
+            >
+                Crie sua conta Wastee.
+            </Text>
 
-      <View style={tw`w-90 flex flex-col gap-y-2`}>
-        <Controller
-          control={control}
-          rules={{ required: "Nome completo é obrigatório" }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <View>
-              <Input
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Nome completo"
-                errorMessage={errors.fullName?.message}
-                required
-              />
+            <View
+                style={tw`flex-1 w-full px-4 flex flex-col items-center gap-y-4`}
+            >
+                <Controller
+                    name="fullName"
+                    control={control}
+                    rules={{ required: "Nome completo é obrigatório" }}
+                    render={({ field }) => (
+                        <Input
+                            control={control}
+                            error={errors?.fullName?.message}
+                            label="Nome completo"
+                            {...field}
+                        />
+                    )}
+                />
+
+                <Controller
+                    control={control}
+                    name="email"
+                    rules={{
+                        required: "E-mail é obrigatório",
+                        pattern: {
+                            value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
+                            message: "E-mail inválido",
+                        },
+                    }}
+                    render={({ field }) => (
+                        <Input
+                            control={control}
+                            error={errors?.email?.message}
+                            label="E-mail"
+                            {...field}
+                        />
+                    )}
+                />
+
+                <Button
+                    disabled={!isValid}
+                    onPress={handleSubmit(onSubmit)}
+                    title="Continuar"
+                />
+
+                <Text style={tw`text-grayscale-60 text-center`}>
+                    Já possui conta?{" "}
+                    <Text
+                        style={tw`text-grayscale-100`}
+                        onPress={() => router.replace("/login")}
+                    >
+                        Login
+                    </Text>
+                </Text>
             </View>
-          )}
-          name="fullName"
-        />
-
-        <Controller
-          control={control}
-          rules={{
-            required: "E-mail é obrigatório",
-            pattern: {
-              value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
-              message: "E-mail inválido",
-            },
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <View>
-              <Input
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="E-mail"
-                errorMessage={errors.email?.message}
-                required
-              />
-            </View>
-          )}
-          name="email"
-        />
-
-        <Button disabled={!isValid} onPress={handleSubmit(onSubmit)} title="Continuar" />
-
-        <Text style={tw`text-gray-600 text-center`}>
-          Já possui conta?{" "}
-          <Text style={tw`text-white`} onPress={() => router.replace("/login")}>
-            Login
-          </Text>
-        </Text>
-      </View>
-    </View>
-  );
+        </View>
+    );
 };
 
 export default Register;

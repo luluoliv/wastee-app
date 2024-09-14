@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { ItemData } from "./items";
-import tw from "twrnc";
+import tw from "@/src/lib/tailwind";
 import { Feather } from "@expo/vector-icons";
 
 interface ItemProps {
@@ -20,7 +20,7 @@ const Item: React.FC<ItemProps> = ({ data }) => {
   const hasDiscount = !!data.discountedPrice;
 
   return (
-    <View style={tw`w-1/2 p-2`}>
+    <View style={tw`p-2`}>
       <View style={tw`relative w-full`}>
         <Image
           source={{ uri: data.images[0] }}
@@ -28,7 +28,7 @@ const Item: React.FC<ItemProps> = ({ data }) => {
           resizeMode="cover"
         />
         <TouchableOpacity
-          style={tw`absolute flex-row gap-x-1 bottom-2 left-2 bg-[#0C0C11A3] bg-opacity-50 p-1 rounded`}
+          style={tw`absolute flex-row gap-x-1 bottom-2 left-2 bg-[#0C0C11] bg-opacity-50 p-1 rounded`}
           onPress={handleClassificationPress}
         >
           <Text style={tw`text-white text-xs`}>★</Text>

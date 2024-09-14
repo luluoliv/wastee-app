@@ -1,5 +1,5 @@
 import React from "react";
-import tw from "twrnc";
+import tw from "@/src/lib/tailwind";
 import { View, Text, Image, ScrollView, Button, TouchableOpacity } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";

@@ -1,16 +1,15 @@
+import React from "react";
 import {
     TouchableOpacity,
-    Text,
-    StyleSheet,
-    ActivityIndicator,
+    Text, ActivityIndicator,
     View,
     GestureResponderEvent,
     StyleProp,
     ViewStyle,
-    TextStyle,
+    TextStyle
 } from "react-native";
-import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
+import tw from "@/src/lib/tailwind";
 
 interface ButtonProps {
     onPress: (event: GestureResponderEvent) => void;
@@ -33,16 +32,16 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
     return (
         <TouchableOpacity
-            style={[styles.button, style]}
+            style={[tw`w-full bg-primary px-4 py-3 rounded-xl items-center flex-row justify-center`, style]}
             onPress={onPress}
             disabled={loading || disabled}
         >
-            <View style={styles.content}>
+            <View style={tw`flex-row items-center`}>
                 {loading && (
                     <ActivityIndicator
                         size="small"
                         color="#FFFFFF"
-                        style={styles.spinner}
+                        style={tw`mr-3`}
                     />
                 )}
                 {icon && (
@@ -50,42 +49,15 @@ const Button: React.FC<ButtonProps> = ({
                         name={icon}
                         size={20}
                         color="#FFFFFF"
-                        style={styles.icon}
+                        style={tw`mr-3`}
                     />
                 )}
-                <Text style={[styles.text, textStyle]}>
+                <Text style={[tw`text-grayscale-100 text-base font-semibold`, textStyle]}>
                     {loading ? "Loading..." : title}
                 </Text>
             </View>
         </TouchableOpacity>
     );
 };
-
-const styles = StyleSheet.create({
-    button: {
-        backgroundColor: "#3573FB",
-        paddingVertical: 14,
-        borderRadius: 12,
-        alignItems: "center",
-        flexDirection: "row",
-        justifyContent: "center",
-    },
-    content: {
-        flexDirection: "row",
-        alignItems: "center",
-    },
-    text: {
-        fontFamily: "Poppins_500Medium",
-        color: "#FFFFFF",
-        fontSize: 16,
-        fontWeight: "bold",
-    },
-    spinner: {
-        marginRight: 10,
-    },
-    icon: {
-        marginRight: 10,
-    },
-});
 
 export default Button;

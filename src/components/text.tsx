@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { View, Text as RNText, TextProps } from "react-native";
-import tw from "twrnc";
+import tw from "@/src/lib/tailwind";
 import { FieldError } from "react-hook-form";
 
 export interface TextComponentProps extends TextProps {
