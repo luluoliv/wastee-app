@@ -1,12 +1,10 @@
 import React from "react";
-import tw from "@/src/lib/tailwind";
 import { View, FlatList, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import tw from "@/src/lib/tailwind";
 
 import Item from "@/src/components/item";
-import Input from "@/src/components/input";
 import { useForm } from "react-hook-form";
-import { Feather } from "@expo/vector-icons";
 import { items } from "@/src/components/items";
 
 export default function Home() {
@@ -18,20 +16,17 @@ export default function Home() {
     };
 
     return (
-        <View style={tw`flex-1 pt-10 bg-gray-900`}>
+        <View style={tw`w-full flex-1 pt-10 bg-grayscale-20`}>
             <FlatList
                 data={items}
                 renderItem={({ item }) => (
-                    <View style={tw`w-full`}>
-                        <TouchableOpacity
-                            onPress={() => handleItemPress(item.id)}
-                        >
-                            <Item key={item.id} data={item} />
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity onPress={() => handleItemPress(item.id)}>
+                        <Item data={item} />
+                    </TouchableOpacity>
                 )}
                 keyExtractor={(item) => item.id}
-                contentContainerStyle={tw`p-2`}
+                contentContainerStyle={tw`p-4`}
+                columnWrapperStyle={tw`justify-between mb-4`}
                 numColumns={2}
             />
         </View>

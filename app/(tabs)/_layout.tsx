@@ -8,9 +8,9 @@ export default function TabLayout() {
             initialRouteName="home"
             screenOptions={() => ({
                 headerShown: false,
-                tabBarActiveTintColor: "white",
+                tabBarActiveTintColor: "#fbfcff",
                 tabBarStyle: {
-                    backgroundColor: "black",
+                    backgroundColor: "#0c0c11",
                     borderTopWidth: 0,
                 },
                 tabBarLabelStyle: {

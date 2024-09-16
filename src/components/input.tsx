@@ -133,7 +133,7 @@ const Input: FC<InputProps> = forwardRef(
                     />
                     {rightSideContent || secureTextEntry ? (
                         <View
-                            style={tw`absolute right-3 transform -translate-y-1/2`}
+                            style={tw`absolute right-3`}
                         >
                             <TouchableOpacity
                                 onPress={() =>
