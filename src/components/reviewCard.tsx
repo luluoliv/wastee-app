@@ -1,8 +1,9 @@
-import { View, Text } from "react-native";
 import React from "react";
+import { View, Text } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+
 import tw from "../lib/tailwind";
 import { Comment } from "./items";
-import { FontAwesome } from "@expo/vector-icons";
 import { formatDate } from "../utils/formatDate";
 
 interface ReviewCardProps {
@@ -10,6 +11,7 @@ interface ReviewCardProps {
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ comment }) => {
+    const maxLengthComment = 100;
     const stars = [];
 
     for (let i = 1; i <= 5; i++) {
@@ -32,16 +34,21 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ comment }) => {
             );
         }
     }
+
+    const truncatedDescription =
+    comment.comment.length > maxLengthComment
+        ? comment.comment.slice(0, maxLengthComment) + "..."
+        : comment.comment;
     return (
         <View
-            style={tw`w-3/5 bg-grayscale-20 rounded-xl p-5 border border-grayscale-60`}
+            style={tw`w-80 flex-col gap-y-3 bg-grayscale-20 rounded-xl p-5 border border-grayscale-60`}
         >
             <View style={tw`flex-row`}>{stars}</View>
             <Text style={tw`font-medium text-sm text-grayscale-60`}>
                 {comment.user} • {formatDate(comment.date)}, {comment.time}
             </Text>
-            <Text style={tw`font-medium text-sm text-grayscale-60`}>
-                {comment.user} • {formatDate(comment.date)}, {comment.time}
+            <Text style={tw`font-normal text-base text-grayscale-100`}>
+                {truncatedDescription}
             </Text>
         </View>
     );

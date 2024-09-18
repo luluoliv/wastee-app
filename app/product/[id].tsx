@@ -1,25 +1,52 @@
 import React, { useState } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 
 import tw from "@/src/lib/tailwind";
 
 import { items } from "@/src/components/items";
+import { sellers } from "@/src/components/sellers";
+
 import LikeButton from "@/src/components/like";
 import Classification from "@/src/components/classification";
 import Button from "@/src/components/button";
 import Modal from "@/src/components/modal";
 import Divider from "@/src/components/divider";
 import ReviewCard from "@/src/components/reviewCard";
+import CardSeller from "@/src/components/cardSeller";
+import Header from "@/src/components/header";
+import Dropdown from "@/src/components/dropdown";
+import Footer from "@/src/components/footer";
+import ModalReport from "@/src/components/modalReport";
 
 const Product = () => {
     const { id } = useLocalSearchParams<{ id: string }>();
     const item = items.find((item) => item.id === id);
-    const router = useRouter();
 
     const maxLengthDescription = 150;
+
     const [isOpen, setIsOpen] = useState(false);
+    const [isReport, setIsReport] = useState(false);
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+
+    const options = [
+        {
+            label: "Visitar vendedor",
+            icon: "shopping-bag",
+            action: () => router.push(`/seller/${item.seller}`),
+        },
+        {
+            label: "Compartilhar",
+            icon: "share-2",
+            action: () => console.log("Produto compartilhado."),
+        },
+        {
+            label: "Denunciar",
+            icon: "alert-circle",
+            action: () => setIsReport(!isReport),
+        },
+    ];
 
     if (!item) {
         return <Text style={tw`text-grayscale-100`}>Item não encontrado.</Text>;
@@ -30,25 +57,27 @@ const Product = () => {
             ? item.description.slice(0, maxLengthDescription) + "..."
             : item.description;
 
+    const seller = sellers.find((seller) => seller.id === item.seller);
+
     return (
         <View style={tw`flex-1 py-10 bg-grayscale-20`}>
-            <View
-                style={tw`flex-row items-center justify-between p-4 bg-grayscale-20`}
-            >
-                <TouchableOpacity onPress={() => router.back()}>
-                    <Feather name="arrow-left" size={24} color="white" />
-                </TouchableOpacity>
-                <Text style={tw`text-primary text-lg font-bold`}>
-                    {item.category}
-                </Text>
-                <TouchableOpacity>
-                    <Feather name="more-horizontal" size={20} color="white" />
-                </TouchableOpacity>
-            </View>
+            <Header
+                title={item.category}
+                moreIconName="more-horizontal"
+                onMorePress={() => setDropdownVisible(!dropdownVisible)}
+            />
+
+            <ModalReport visible={isReport} onClose={()=> setIsReport(false)}/>
+
+            <Dropdown
+                options={options}
+                visible={dropdownVisible}
+                onClose={() => setDropdownVisible(false)}
+            />
 
             <ScrollView contentContainerStyle={tw`w-full px-4`}>
                 <ScrollView horizontal pagingEnabled>
-                    {item?.images?.map((image, index) => (
+                    {item.images?.map((image, index) => (
                         <Image
                             key={index}
                             source={{ uri: image }}
@@ -102,13 +131,9 @@ const Product = () => {
                             size={14}
                         />
 
-                        <Text
-                            style={tw`text-grayscale-60 font-medium text-base`}
-                        >
+                        <Text style={tw`text-grayscale-60 font-medium text-base`}>
                             <Feather name="user" size={16} color="#787f8d" />{" "}
-                            {item.seller.name
-                                ? item.seller.name
-                                : "Nome não disponível"}
+                            {seller ? seller.name : "Nome não disponível"}
                         </Text>
                     </View>
 
@@ -117,9 +142,7 @@ const Product = () => {
                         visible={isOpen}
                         onClose={() => setIsOpen(false)}
                     >
-                        <Text
-                            style={tw`text-grayscale-100 font-normal text-base`}
-                        >
+                        <Text style={tw`text-grayscale-100 font-normal text-base`}>
                             {item.description}
                         </Text>
                     </Modal>
@@ -129,24 +152,15 @@ const Product = () => {
                             Descrição
                         </Text>
                         <View>
-                            <Text
-                                style={tw`text-grayscale-100 font-normal text-base`}
-                            >
+                            <Text style={tw`text-grayscale-100 font-normal text-base`}>
                                 {item.description.length > maxLengthDescription
                                     ? truncatedDescription
                                     : item.description}
                             </Text>
                             {item.description.length > maxLengthDescription && (
-                                <TouchableOpacity
-                                    onPress={() => setIsOpen(!isOpen)}
-                                >
-                                    <Text
-                                        style={tw`text-primary font-medium text-base text-right`}
-                                    >
-                                        {item.description.length >
-                                        maxLengthDescription
-                                            ? "Ler mais"
-                                            : null}
+                                <TouchableOpacity onPress={() => setIsOpen(!isOpen)}>
+                                    <Text style={tw`text-primary font-medium text-base text-right`}>
+                                        Ler mais
                                     </Text>
                                 </TouchableOpacity>
                             )}
@@ -167,123 +181,79 @@ const Product = () => {
                             Localização
                         </Text>
                         <View style={tw`flex-row justify-between`}>
-                            <Text
-                                style={tw`text-grayscale-60 font-medium text-base`}
-                            >
+                            <Text style={tw`text-grayscale-60 font-medium text-base`}>
                                 Estado
                             </Text>
-                            <Text
-                                style={tw`text-grayscale-100 font-medium text-base`}
-                            >
-                                {item?.location.state}
+                            <Text style={tw`text-grayscale-100 font-medium text-base`}>
+                                {item.location.state}
                             </Text>
                         </View>
                         <View style={tw`flex-row justify-between`}>
-                            <Text
-                                style={tw`text-grayscale-60 font-medium text-base`}
-                            >
+                            <Text style={tw`text-grayscale-60 font-medium text-base`}>
                                 Cidade
                             </Text>
-                            <Text
-                                style={tw`text-grayscale-100 font-medium text-base`}
-                            >
-                                {item?.location.city}
+                            <Text style={tw`text-grayscale-100 font-medium text-base`}>
+                                {item.location.city}
                             </Text>
                         </View>
                         <View style={tw`flex-row justify-between`}>
-                            <Text
-                                style={tw`text-grayscale-60 font-medium text-base`}
-                            >
+                            <Text style={tw`text-grayscale-60 font-medium text-base`}>
                                 Bairro
                             </Text>
-                            <Text
-                                style={tw`text-grayscale-100 font-medium text-base`}
-                            >
-                                {item?.location.neighborhood}
+                            <Text style={tw`text-grayscale-100 font-medium text-base`}>
+                                {item.location.neighborhood}
                             </Text>
                         </View>
                     </View>
 
                     <Divider />
 
-                    <View style={tw`border border-grayscale-40 rounded-xl`}>
-                        <View style={tw`bg-grayscale-40 p-3 items-center`}>
-                            <Image
-                                style={tw`rounded-full w-14 h-14`}
-                                src={item.seller.photo}
-                                alt={item.seller.name}
-                            />
-                        </View>
-                        <View
-                            style={tw`w-full flex-row items-center justify-between p-3`}
-                        >
-                            <View>
-                                <Text
-                                    style={tw`text-grayscale-100 font-medium text-base`}
-                                >
-                                    {item.seller.name}
-                                </Text>
-                                <Text
-                                    style={tw`text-grayscale-80 font-medium text-sm`}
-                                >
-                                    <Feather
-                                        size={12}
-                                        name="shopping-bag"
-                                        color="#dfe6f5"
-                                    />{" "}
-                                    {item.seller.products.length} produtos à
-                                    venda
-                                </Text>
-                            </View>
-                            <Button
-                                iconColor="text-grayscale-20"
-                                style={tw`bg-grayscale-100 w-16 p-2`}
-                                textStyle={tw`text-grayscale-20 font-semibold text-base`}
-                                title="Perfil"
-                                onPress={() =>
-                                    console.log("perfil do vendedor")
-                                }
-                            />
-                        </View>
-                    </View>
+                    <CardSeller item={item} />
 
                     <Divider />
 
                     <View style={tw`flex-col gap-y-3`}>
                         <View style={tw`flex-row justify-between`}>
                             <View style={tw`flex-row gap-x-1`}>
-                                <Text
-                                    style={tw`text-grayscale-80 font-medium text-xl`}
-                                >
+                                <Text style={tw`text-grayscale-80 font-medium text-xl`}>
                                     Opiniões sobre vendedor
                                 </Text>
-                                <Text
-                                    style={tw`text-grayscale-60 font-medium text-xl`}
-                                >
+                                <Text style={tw`text-grayscale-60 font-medium text-xl`}>
                                     ({item.comments?.length})
                                 </Text>
                             </View>
 
                             <View style={tw`flex-row items-center gap-x-1`}>
-                                <FontAwesome
-                                    name="star"
-                                    size={16}
-                                    color="#fbfcff"
-                                />
-                                <Text
-                                    style={tw`text-grayscale-80 font-medium text-xl`}
-                                >
+                                <FontAwesome name="star" size={16} color="#fbfcff" />
+                                <Text style={tw`text-grayscale-80 font-medium text-xl`}>
                                     {item.rate}
                                 </Text>
                             </View>
                         </View>
 
-                        <ScrollView horizontal pagingEnabled contentContainerStyle={tw`flex-row items-center gap-x-3 pb-2`}>
-                            {item?.comments?.map((comment, index) => (
-                                <ReviewCard comment={comment} />
+                        <ScrollView
+                            horizontal
+                            pagingEnabled
+                            contentContainerStyle={tw`flex-row items-center gap-x-3`}
+                        >
+                            {item.comments?.map((comment, index) => (
+                                <TouchableOpacity
+                                    key={index}
+                                    onPress={() => router.push(`/reviews/${id}`)}
+                                    disabled={comment.comment.length < 100}
+                                >
+                                    <ReviewCard comment={comment} />
+                                </TouchableOpacity>
                             ))}
                         </ScrollView>
+                        <Button
+                            style={tw`bg-grayscale-40`}
+                            title="Ver análises"
+                            onPress={() => router.push(`/reviews/${id}`)}
+                        />
                     </View>
+
+                    <Footer />
                 </View>
             </ScrollView>
         </View>

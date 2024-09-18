@@ -23,7 +23,7 @@ const Item: React.FC<ItemProps> = ({ data }) => {
         <View style={tw`w-[168px]`}>
             <View style={tw`relative w-full`}>
                 <Image
-                    source={{ uri: data.images[0] }}
+                    source={{ uri: data?.images[0] }}
                     style={tw`w-[168px] h-[168px] rounded-xl`}
                     resizeMode="cover"
                 />

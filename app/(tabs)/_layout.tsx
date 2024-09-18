@@ -71,6 +71,19 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
+                name="news"
+                options={{
+                    tabBarIcon: ({ focused, color }) => (
+                        <Feather
+                            fill={focused ? "white" : ""}
+                            size={24}
+                            name="grid"
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+            <Tabs.Screen
                 name="perfil"
                 options={{
                     tabBarIcon: ({ focused, color }) => (

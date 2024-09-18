@@ -1,3 +1,4 @@
+
 export interface Comment {
     user: string;
     comment: string;
@@ -5,19 +6,11 @@ export interface Comment {
     time: string;
     rating: number;
 }
-export interface Seller {
-    name: string;
-    products: ItemData[];
-    photo: string;
-    rating: number;
-    comments: Comment[]
-    location: Location;
-}
 
 export interface Location {
-    state: string,
-    city: string,
-    neighborhood: string,
+    state: string;
+    city: string;
+    neighborhood: string;
 }
 
 export interface ItemData {
@@ -27,7 +20,7 @@ export interface ItemData {
     originalPrice: string;
     discountedPrice?: string;
     rate?: string;
-    seller: Seller;
+    seller: string;
     location: Location;
     description: string;
     comments?: Comment[];
@@ -48,52 +41,29 @@ export const items: ItemData[] = [
         discountedPrice: "",
         rate: "4.2",
         ratingsCount: 10,
-        seller: {
-            name: "Luara Lima",
-            photo: "https://media.gettyimages.com/id/1317804578/pt/foto/one-businesswoman-headshot-smiling-at-the-camera.jpg?s=612x612&w=gi&k=20&c=IcBzSV04zCeMVk3kty-1RtusxibnF2pxD32QgBMzVu8=",
-            rating: 4.2,
-            products: [],
-            comments: [
-                {
-                    user: "Ana",
-                    comment: "Ótimo custo-benefício!",
-                    date: "2024-09-10",
-                    time: "14:35:22",
-                    rating: 4,
-                },
-                {
-                    user: "Carlos",
-                    comment: "Chegou em perfeito estado.",
-                    date: "2024-09-11",
-                    time: "09:12:47",
-                    rating: 4,
-                },
-            ],
-            location: {
-                state: "São Paulo",
-                city: "São Paulo",
-                neighborhood: "Casa Verde",
-            },
-        },
+        seller: "1",
         location: {
             state: "São Paulo",
             city: "São Paulo",
             neighborhood: "Casa Verde",
         },
         category: "Smartphones",
-        description: "O Smartphone EcoSmart Recondicionado é a escolha perfeita...",
+        description:
+            "O Smartphone EcoSmart Recondicionado é a escolha perfeita.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut consequat lacus. Vestibulum lacus mauris, tincidunt eu pellentesque at, posuere sit amet lorem. Suspendisse cursus leo cursus velit tempus, sed eleifend leo convallis. Integer feugiat erat leo, non consequat erat maximus sed. Donec lectus diam, imperdiet id vestibulum a, interdum et est. Maecenas facilisis massa sed tortor ultrices tincidunt. Integer lobortis neque est, posuere sodales erat auctor in. Pellentesque id massa tellus. Donec ex lacus, auctor in nibh nec, congue hendrerit augue",
         favorited: true,
         comments: [
             {
                 user: "Ana",
-                comment: "Ótimo custo-benefício!",
+                comment:
+                    "Ótimo custo-benefício! Eu tinha um desse, mas quebrou e o conserto era muito caro, então ou eu comprava outro ou eu pagava, decidi comprar outro no melhor aplicativo possível!",
                 date: "2024-09-10",
                 time: "14:35:22",
                 rating: 4,
             },
             {
                 user: "Carlos",
-                comment: "Chegou em perfeito estado.",
+                comment:
+                    "Chegou em perfeito estado. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut consequat lacus. Vestibulum lacus mauris, tincidunt eu pellentesque at, posuere sit amet lorem. Suspendisse cursus leo cursus velit tempus, sed eleifend leo convallis. Integer feugiat erat leo, non consequat erat maximus sed. Donec lectus diam, imperdiet id vestibulum a, interdum et est. Maecenas facilisis massa sed tortor ultrices tincidunt. Integer lobortis neque est, posuere sodales erat auctor in. Pellentesque id massa tellus. Donec ex lacus, auctor in nibh nec, congue hendrerit augue",
                 date: "2024-09-11",
                 time: "09:12:47",
                 rating: 4,
@@ -111,52 +81,29 @@ export const items: ItemData[] = [
         discountedPrice: "",
         rate: "4.3",
         ratingsCount: 10,
-        seller: {
-            name: "Maria Oliveira",
-            photo: "",
-            rating: 4.3,
-            products: [],
-            comments: [
-                {
-                    user: "João",
-                    comment: "Muito bom, recomendo.",
-                    date: "2024-09-09",
-                    time: "10:25:35",
-                    rating: 4,
-                },
-                {
-                    user: "Laura",
-                    comment: "Excelente qualidade!",
-                    date: "2024-09-11",
-                    time: "17:08:29",
-                    rating: 4,
-                },
-            ],
-            location: {
-                state: "São Paulo",
-                city: "São Paulo",
-                neighborhood: "Casa Verde",
-            },
-        },
+        seller: "1",
         location: {
             state: "São Paulo",
             city: "São Paulo",
             neighborhood: "Casa Verde",
         },
         category: "Smartphones",
-        description: "O modelo 2023 do EcoSmart, com as mais recentes inovações tecnológicas.",
+        description:
+            "O modelo 2023 do EcoSmart, com as mais recentes inovações tecnológicas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut consequat lacus. Vestibulum lacus mauris, tincidunt eu pellentesque at, posuere sit amet lorem. Suspendisse cursus leo cursus velit tempus, sed eleifend leo convallis. Integer feugiat erat leo, non consequat erat maximus sed. Donec lectus diam, imperdiet id vestibulum a, interdum et est. Maecenas facilisis massa sed tortor ultrices tincidunt. Integer lobortis neque est, posuere sodales erat auctor in. Pellentesque id massa tellus. Donec ex lacus, auctor in nibh nec, congue hendrerit augue.",
         favorited: false,
         comments: [
             {
                 user: "João",
-                comment: "Muito bom, recomendo.",
+                comment:
+                    "Muito bom, recomendo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                 date: "2024-09-09",
                 time: "10:25:35",
                 rating: 4,
             },
             {
                 user: "Laura",
-                comment: "Excelente qualidade!",
+                comment:
+                    "Excelente qualidade! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut consequat lacus. Vestibulum lacus mauris, tincidunt eu pellentesque at, posuere sit amet lorem. Suspendisse cursus leo cursus velit tempus, sed eleifend leo convallis. Integer feugiat erat leo, non consequat erat maximus sed. Donec lectus diam, imperdiet id vestibulum a, interdum et est. Maecenas facilisis massa sed tortor ultrices tincidunt. Integer lobortis neque est, posuere sodales erat auctor in. Pellentesque id massa tellus.",
                 date: "2024-09-11",
                 time: "17:08:29",
                 rating: 4,
@@ -164,4 +111,3 @@ export const items: ItemData[] = [
         ],
     },
 ];
-

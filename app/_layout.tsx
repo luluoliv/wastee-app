@@ -47,6 +47,8 @@ export default function RootLayout() {
                     <Stack.Screen name="confirm" />
                     <Stack.Screen name="(tabs)" />
                     <Stack.Screen name="product/[id]" />
+                    <Stack.Screen name="reviews/[id]" />
+                    <Stack.Screen name="seller/[id]" />
                 </Stack>
             </GestureHandlerRootView>
         </PaperProvider>
