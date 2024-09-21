@@ -118,7 +118,9 @@ const Seller = () => {
                         <Button
                             title="Ver produtos"
                             style={tw`bg-grayscale-40`}
-                            onPress={() => console.log("Ver produtos")}
+                            onPress={() =>
+                                router.push(`/products-seller/${id}`)
+                            }
                         />
                     )}
                 </View>

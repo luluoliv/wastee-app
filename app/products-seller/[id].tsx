@@ -1,13 +1,15 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import Header from '@/src/components/header'
+import { View, Text } from "react-native";
+import React from "react";
+import Header from "@/src/components/header";
+import { useLocalSearchParams } from "expo-router";
 
 const ProductsSeller = () => {
-  return (
-    <View>
-      <Header />
-    </View>
-  )
-}
+    const { id } = useLocalSearchParams<{ id: string }>();
+    return (
+        <View>
+            <Header />
+        </View>
+    );
+};
 
-export default ProductsSeller
+export default ProductsSeller;
