@@ -239,7 +239,7 @@ const Product = () => {
                             {item.comments?.map((comment, index) => (
                                 <TouchableOpacity
                                     key={index}
-                                    onPress={() => router.push(`/reviews/${id}`)}
+                                    onPress={() => router.push(`/reviews/${seller?.id}`)}
                                     disabled={comment.comment.length < 100}
                                 >
                                     <ReviewCard comment={comment} />

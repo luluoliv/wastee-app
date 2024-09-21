@@ -100,10 +100,10 @@ const Seller = () => {
                                 <TouchableOpacity
                                     key={index}
                                     onPress={() =>
-                                        router.push(`/product/${id}`)
+                                        router.push(`/product/${product.id}`)
                                     }
                                 >
-                                    <Item data={product} />
+                                    <Item likable data={product} />
                                 </TouchableOpacity>
                             ))
                         ) : (

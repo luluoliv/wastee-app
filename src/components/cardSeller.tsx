@@ -16,7 +16,7 @@ const CardSeller: React.FC<CardSellerProps> = ({ item }) => {
     const router = useRouter();
 
     const seller = sellers.find((seller) => seller.id === item?.seller);
-    const products = items.filter((item) => item?.id === seller?.id);
+    const products = items.filter((item) => item?.seller === seller?.id);
 
     if (!seller) {
         return (
@@ -43,8 +43,13 @@ const CardSeller: React.FC<CardSellerProps> = ({ item }) => {
                         {seller.name}
                     </Text>
                     <Text style={tw`text-grayscale-80 font-medium text-sm`}>
-                        <Feather size={12} name="shopping-bag" color="#dfe6f5" />{" "}
-                        {products.length} produtos à venda
+                        <Feather
+                            size={12}
+                            name="shopping-bag"
+                            color="#dfe6f5"
+                        />{" "}
+                        {products.length}{" "}
+                        {products.length > 1 ? "produtos" : "produto"} à venda
                     </Text>
                 </View>
                 <Button

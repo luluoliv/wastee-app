@@ -38,7 +38,7 @@ const Reviews = () => {
 
                 <View style={tw`flex-row items-center justify-between`}>
                     <Text style={tw`font-medium text-xl text-grayscale-100`}>
-                        ({item?.ratingsCount})
+                        ({item?.comments?.length})
                     </Text>
                     <Text style={tw`font-medium text-xl text-grayscale-60`}>
                         Mais recentes

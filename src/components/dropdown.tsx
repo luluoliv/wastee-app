@@ -9,7 +9,7 @@ import {
     ViewStyle
 } from "react-native";
 import tw from "../lib/tailwind";
-import { Feather } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 
 interface DropdownOption {
     label: string;

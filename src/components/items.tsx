@@ -26,7 +26,6 @@ export interface ItemData {
     comments?: Comment[];
     category?: string;
     favorited?: boolean;
-    ratingsCount?: number;
 }
 
 export const items: ItemData[] = [
@@ -38,9 +37,8 @@ export const items: ItemData[] = [
         ],
         title: "Smartphone EcoSmart Recondicionado",
         originalPrice: "R$599,90",
-        discountedPrice: "",
+        discountedPrice: "R$549,90",
         rate: "4.2",
-        ratingsCount: 10,
         seller: "1",
         location: {
             state: "São Paulo",
@@ -49,13 +47,13 @@ export const items: ItemData[] = [
         },
         category: "Smartphones",
         description:
-            "O Smartphone EcoSmart Recondicionado é a escolha perfeita.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut consequat lacus. Vestibulum lacus mauris, tincidunt eu pellentesque at, posuere sit amet lorem. Suspendisse cursus leo cursus velit tempus, sed eleifend leo convallis. Integer feugiat erat leo, non consequat erat maximus sed. Donec lectus diam, imperdiet id vestibulum a, interdum et est. Maecenas facilisis massa sed tortor ultrices tincidunt. Integer lobortis neque est, posuere sodales erat auctor in. Pellentesque id massa tellus. Donec ex lacus, auctor in nibh nec, congue hendrerit augue",
+            "O Smartphone EcoSmart Recondicionado é a escolha perfeita para quem quer tecnologia de ponta a um preço acessível. O modelo conta com tela HD de 6.5 polegadas, 64GB de armazenamento interno, câmera traseira de 12MP e processador octa-core. Ideal para quem busca desempenho e economia de forma sustentável. Além disso, o produto passou por uma inspeção rigorosa para garantir a qualidade e durabilidade.",
         favorited: true,
         comments: [
             {
                 user: "Ana",
                 comment:
-                    "Ótimo custo-benefício! Eu tinha um desse, mas quebrou e o conserto era muito caro, então ou eu comprava outro ou eu pagava, decidi comprar outro no melhor aplicativo possível!",
+                    "Ótimo custo-benefício! Eu tinha um desse, mas quebrou e o conserto era muito caro. Decidi comprar este recondicionado e estou muito satisfeita! Funciona perfeitamente.",
                 date: "2024-09-10",
                 time: "14:35:22",
                 rating: 4,
@@ -63,10 +61,10 @@ export const items: ItemData[] = [
             {
                 user: "Carlos",
                 comment:
-                    "Chegou em perfeito estado. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut consequat lacus. Vestibulum lacus mauris, tincidunt eu pellentesque at, posuere sit amet lorem. Suspendisse cursus leo cursus velit tempus, sed eleifend leo convallis. Integer feugiat erat leo, non consequat erat maximus sed. Donec lectus diam, imperdiet id vestibulum a, interdum et est. Maecenas facilisis massa sed tortor ultrices tincidunt. Integer lobortis neque est, posuere sodales erat auctor in. Pellentesque id massa tellus. Donec ex lacus, auctor in nibh nec, congue hendrerit augue",
+                    "Chegou em perfeito estado, sem sinais de uso. Parece novo e até agora não tive nenhum problema. Recomendo para quem quer economizar sem perder qualidade.",
                 date: "2024-09-11",
                 time: "09:12:47",
-                rating: 4,
+                rating: 5,
             },
         ],
     },
@@ -78,9 +76,8 @@ export const items: ItemData[] = [
         ],
         title: "Smartphone EcoSmart 2023",
         originalPrice: "R$699,90",
-        discountedPrice: "",
+        discountedPrice: "R$659,90",
         rate: "4.3",
-        ratingsCount: 10,
         seller: "1",
         location: {
             state: "São Paulo",
@@ -89,13 +86,13 @@ export const items: ItemData[] = [
         },
         category: "Smartphones",
         description:
-            "O modelo 2023 do EcoSmart, com as mais recentes inovações tecnológicas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut consequat lacus. Vestibulum lacus mauris, tincidunt eu pellentesque at, posuere sit amet lorem. Suspendisse cursus leo cursus velit tempus, sed eleifend leo convallis. Integer feugiat erat leo, non consequat erat maximus sed. Donec lectus diam, imperdiet id vestibulum a, interdum et est. Maecenas facilisis massa sed tortor ultrices tincidunt. Integer lobortis neque est, posuere sodales erat auctor in. Pellentesque id massa tellus. Donec ex lacus, auctor in nibh nec, congue hendrerit augue.",
+            "O modelo 2023 do EcoSmart traz as mais recentes inovações tecnológicas, incluindo uma tela OLED de 6.7 polegadas, 128GB de armazenamento, câmera tripla de 48MP e bateria de 5000mAh com carregamento rápido. Perfeito para quem busca uma experiência fluida e moderna no uso diário. Além disso, o EcoSmart 2023 é compatível com a rede 5G, proporcionando maior velocidade de navegação.",
         favorited: false,
         comments: [
             {
                 user: "João",
                 comment:
-                    "Muito bom, recomendo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                    "Muito bom, recomendo para quem quer um smartphone rápido e com bom custo-benefício. A bateria dura bastante e o carregamento é realmente rápido.",
                 date: "2024-09-09",
                 time: "10:25:35",
                 rating: 4,
@@ -103,10 +100,49 @@ export const items: ItemData[] = [
             {
                 user: "Laura",
                 comment:
-                    "Excelente qualidade! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut consequat lacus. Vestibulum lacus mauris, tincidunt eu pellentesque at, posuere sit amet lorem. Suspendisse cursus leo cursus velit tempus, sed eleifend leo convallis. Integer feugiat erat leo, non consequat erat maximus sed. Donec lectus diam, imperdiet id vestibulum a, interdum et est. Maecenas facilisis massa sed tortor ultrices tincidunt. Integer lobortis neque est, posuere sodales erat auctor in. Pellentesque id massa tellus.",
+                    "Excelente qualidade! A câmera é incrível, principalmente as fotos noturnas. A tela é muito nítida e as cores são vibrantes. Vale a pena o investimento.",
                 date: "2024-09-11",
                 time: "17:08:29",
-                rating: 4,
+                rating: 5,
+            },
+        ],
+    },
+    {
+        id: "3",
+        images: [
+            "https://via.placeholder.com/400x300?text=Imagem+1",
+            "https://via.placeholder.com/400x300?text=Imagem+2",
+        ],
+        title: "Notebook EcoLaptop 2022",
+        originalPrice: "R$2.999,90",
+        discountedPrice: "R$2.799,90",
+        rate: "4.5",
+        seller: "2",
+        location: {
+            state: "Minas Gerais",
+            city: "Belo Horizonte",
+            neighborhood: "Savassi",
+        },
+        category: "Notebooks",
+        description:
+            "O EcoLaptop 2022 é um notebook versátil e potente, ideal para uso profissional e acadêmico. Com um processador Intel i7 de 10ª geração, 16GB de RAM, 512GB SSD e tela Full HD de 15.6 polegadas, oferece excelente desempenho para multitarefas e programas pesados. Além disso, sua estrutura fina e leve facilita o transporte, sendo ideal para quem está sempre em movimento.",
+        favorited: true,
+        comments: [
+            {
+                user: "Mariana",
+                comment:
+                    "Ótimo para trabalho e estudos. O desempenho é incrível, consigo abrir vários programas ao mesmo tempo sem travar.",
+                date: "2024-09-12",
+                time: "13:45:00",
+                rating: 5,
+            },
+            {
+                user: "Pedro",
+                comment:
+                    "Muito satisfeito com o produto. É leve e a bateria dura o dia todo, mesmo com uso intenso. Recomendo.",
+                date: "2024-09-13",
+                time: "09:30:00",
+                rating: 5,
             },
         ],
     },

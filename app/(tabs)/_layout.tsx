@@ -1,6 +1,6 @@
 import React from "react";
 import { Tabs } from "expo-router";
-import { Feather } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 
 export default function TabLayout() {
     return (
@@ -74,10 +74,10 @@ export default function TabLayout() {
                 name="news"
                 options={{
                     tabBarIcon: ({ focused, color }) => (
-                        <Feather
+                        <FontAwesome
                             fill={focused ? "white" : ""}
                             size={24}
-                            name="grid"
+                            name="newspaper-o"
                             color={color}
                         />
                     ),

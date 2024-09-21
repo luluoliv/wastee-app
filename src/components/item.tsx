@@ -8,12 +8,14 @@ import tw from "@/src/lib/tailwind";
 import Dropdown from "./dropdown";
 import ModalReport from "./modalReport";
 import { sellers } from "./sellers";
+import LikeButton from "./like";
 
 interface ItemProps {
     data: ItemData;
+    likable?: boolean;
 }
 
-const Item: React.FC<ItemProps> = ({ data }) => {
+const Item: React.FC<ItemProps> = ({ data, likable }) => {
     const router = useRouter();
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [isReport, setIsReport] = useState(false);
@@ -25,7 +27,7 @@ const Item: React.FC<ItemProps> = ({ data }) => {
     const options = [
         {
             label: data.favorited ? "Descurtir" : "Curtir",
-            icon: data.favorited ? "heart" : "heart-o",
+            icon: "heart",
             action: () => console.log("produto curtido."),
         },
         {
@@ -76,10 +78,26 @@ const Item: React.FC<ItemProps> = ({ data }) => {
                     onClose={() => setIsReport(false)}
                 />
                 <TouchableOpacity
-                    style={tw`absolute top-2 rounded-full right-2 bg-grayscale-20 bg-opacity-50 p-1`}
-                    onPress={() => setDropdownVisible(!dropdownVisible)}
+                    style={tw`absolute top-2 rounded-full right-2 bg-grayscale-20 bg-opacity-50 ${likable? "" : "p-1"}`}
+                    onPress={() =>
+                        likable ? setDropdownVisible(!dropdownVisible) : null
+                    }
                 >
-                    <Feather name="more-horizontal" size={20} color="white" />
+                    {likable ? (
+                        <LikeButton
+                            item={data}
+                            size="small"
+                            onFavoriteToggle={(id) =>
+                                console.log(`item ${id} favoritado.`)
+                            }
+                        />
+                    ) : (
+                        <Feather
+                            name="more-horizontal"
+                            size={20}
+                            color="white"
+                        />
+                    )}
                 </TouchableOpacity>
             </View>
             <View style={tw`mt-2 w-full`}>
