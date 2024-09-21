@@ -9,13 +9,13 @@ import { ItemData, items } from "./items";
 import { sellers } from "./sellers";
 
 interface CardSellerProps {
-    item: ItemData;
+    item: ItemData | undefined;
 }
 
 const CardSeller: React.FC<CardSellerProps> = ({ item }) => {
     const router = useRouter();
 
-    const seller = sellers.find((seller) => seller.id === item.seller);
+    const seller = sellers.find((seller) => seller.id === item?.seller);
     const products = items.filter((item) => item?.id === seller?.id);
 
     if (!seller) {
@@ -52,7 +52,7 @@ const CardSeller: React.FC<CardSellerProps> = ({ item }) => {
                     style={tw`bg-grayscale-100 w-16 p-2`}
                     textStyle={tw`text-grayscale-20 font-semibold text-base`}
                     title="Perfil"
-                    onPress={() => router.push(`/seller/${item.seller}`)}
+                    onPress={() => router.push(`/seller/${item?.seller}`)}
                 />
             </View>
         </View>

@@ -25,7 +25,10 @@ const Register = () => {
 
     const onSubmit = (data: any) => {
         console.log(data);
-        router.replace("/confirm");
+        router.push({
+            pathname: "/confirm",
+            params: { email: data.email },
+        });
     };
 
     return (

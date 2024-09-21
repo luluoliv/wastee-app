@@ -4,7 +4,9 @@ import {
     TouchableOpacity,
     ScrollView,
     Animated,
-    Easing
+    Easing,
+    StyleProp,
+    ViewStyle
 } from "react-native";
 import tw from "../lib/tailwind";
 import { Feather } from "@expo/vector-icons";
@@ -12,16 +14,17 @@ import { Feather } from "@expo/vector-icons";
 interface DropdownOption {
     label: string;
     action?: () => void;
-    icon: keyof typeof Feather.glyphMap;
+    icon: keyof typeof Feather.glyphMap | string | null | undefined;
 }
 
 interface DropdownProps {
     visible: boolean;
     onClose: () => void;
     options: DropdownOption[];
+    style?: StyleProp<ViewStyle>
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ visible, onClose, options }) => {
+const Dropdown: React.FC<DropdownProps> = ({ visible, onClose, options, style }) => {
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
@@ -48,7 +51,7 @@ const Dropdown: React.FC<DropdownProps> = ({ visible, onClose, options }) => {
         <Animated.View
             style={[
                 tw`absolute z-10 top-24 right-4 w-48 bg-grayscale-20 rounded-xl shadow-lg`,
-                { opacity: fadeAnim },
+                { opacity: fadeAnim }, style
             ]}
         >
             <ScrollView>

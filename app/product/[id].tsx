@@ -34,7 +34,7 @@ const Product = () => {
         {
             label: "Visitar vendedor",
             icon: "shopping-bag",
-            action: () => router.push(`/seller/${item.seller}`),
+            action: () => router.push(`/seller/${item?.seller}`),
         },
         {
             label: "Compartilhar",

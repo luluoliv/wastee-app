@@ -31,7 +31,7 @@ export interface InputProps
         | string
         | FieldError
         | Merge<FieldError, FieldErrorsImpl<any>>
-        | undefined;
+        | undefined | null;
     control: Control<any>;
 }
 

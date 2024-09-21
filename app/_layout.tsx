@@ -45,9 +45,14 @@ export default function RootLayout() {
                     <Stack.Screen name="initial" />
                     <Stack.Screen name="register" />
                     <Stack.Screen name="confirm" />
+                    <Stack.Screen name="password" />
+                    <Stack.Screen name="tutorial" />
                     <Stack.Screen name="(tabs)" />
                     <Stack.Screen name="product/[id]" />
+                    <Stack.Screen name="products-seller/[id]" />
                     <Stack.Screen name="reviews/[id]" />
+                    <Stack.Screen name="review-seller/[id]" />
+                    <Stack.Screen name="user/[user]" />
                     <Stack.Screen name="seller/[id]" />
                 </Stack>
             </GestureHandlerRootView>
