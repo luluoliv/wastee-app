@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import tw from "@/src/lib/tailwind";
 import Header from "@/src/components/header";
-import { sellers } from "@/src/components/sellers";
+import { sellers } from "@/src/data/sellers";
 import Classification from "@/src/components/classification";
 import Star from "@/src/components/star";
 import Input from "@/src/components/input";

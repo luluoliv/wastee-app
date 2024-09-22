@@ -1,0 +1,76 @@
+import { View, TextInput, Text, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import tw from "../lib/tailwind";
+import { Feather } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+
+export interface InputTextProps {
+    leftSideContent?: React.ReactNode;
+    placeholder: string;
+    onFocusNavigate?: boolean;
+}
+
+const InputText: React.FC<InputTextProps> = ({
+    leftSideContent,
+    placeholder,
+    onFocusNavigate,
+}) => {
+    const [focused, setFocused] = useState(false);
+    const [value, setValue] = useState("");
+    const router = useRouter();
+
+    useEffect(() => {
+        if (focused && onFocusNavigate) {
+            router.push("/search");
+        }
+    }, [focused, onFocusNavigate]);
+
+    return (
+        <View style={tw`w-full flex-row items-center gap-x-2`}>
+            <View
+                style={tw`relative m-auto w-full h-12 bg-grayscale-40 flex flex-row items-center border rounded-xl px-4 py-3`}
+            >
+                {leftSideContent && (
+                    <View style={tw`pr-2.5 justify-center`}>
+                        {leftSideContent}
+                    </View>
+                )}
+
+                {!focused && !value && (
+                    <Text
+                        style={tw.style(
+                            "absolute left-12 text-grayscale-60 text-base bg-grayscale-40"
+                        )}
+                    >
+                        {placeholder}
+                    </Text>
+                )}
+
+                <TextInput
+                    value={value}
+                    onChangeText={setValue}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
+                    placeholderTextColor={tw.color("text-grayscale-60")}
+                    textAlign="left"
+                    style={tw`flex-1 w-full bg-transparent text-grayscale-100 text-base font-medium`}
+                />
+            </View>
+
+            {value.length > 0 && (
+                <TouchableOpacity
+                    style={tw`absolute right-4 bg-grayscale-40`}
+                    onPress={() => setValue("")}
+                >
+                    <Feather
+                        name="x-circle"
+                        size={20}
+                        color={tw.color("text-grayscale-60")}
+                    />
+                </TouchableOpacity>
+            )}
+        </View>
+    );
+};
+
+export default InputText;

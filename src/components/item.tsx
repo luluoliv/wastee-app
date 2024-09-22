@@ -3,11 +3,11 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
-import { ItemData } from "./items";
+import { ItemData } from "../data/items";
 import tw from "@/src/lib/tailwind";
 import Dropdown from "./dropdown";
 import ModalReport from "./modalReport";
-import { sellers } from "./sellers";
+import { sellers } from "../data/sellers";
 import LikeButton from "./like";
 
 interface ItemProps {
@@ -78,10 +78,10 @@ const Item: React.FC<ItemProps> = ({ data, likable }) => {
                     onClose={() => setIsReport(false)}
                 />
                 <TouchableOpacity
-                    style={tw`absolute top-2 rounded-full right-2 bg-grayscale-20 bg-opacity-50 ${likable? "" : "p-1"}`}
-                    onPress={() =>
-                        likable ? setDropdownVisible(!dropdownVisible) : null
-                    }
+                    style={tw`absolute top-2 rounded-full right-2 bg-grayscale-20 bg-opacity-50 ${
+                        likable ? "" : "p-1"
+                    }`}
+                    onPress={() => setDropdownVisible(!dropdownVisible)}
                 >
                     {likable ? (
                         <LikeButton

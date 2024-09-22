@@ -5,8 +5,8 @@ import { Feather, FontAwesome } from "@expo/vector-icons";
 
 import tw from "@/src/lib/tailwind";
 
-import { items } from "@/src/components/items";
-import { sellers } from "@/src/components/sellers";
+import { items } from "@/src/data/items";
+import { sellers } from "@/src/data/sellers";
 
 import LikeButton from "@/src/components/like";
 import Classification from "@/src/components/classification";
@@ -19,6 +19,7 @@ import Header from "@/src/components/header";
 import Dropdown from "@/src/components/dropdown";
 import Footer from "@/src/components/footer";
 import ModalReport from "@/src/components/modalReport";
+import { categories } from "@/src/data/categories";
 
 const Product = () => {
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -58,16 +59,22 @@ const Product = () => {
             : item.description;
 
     const seller = sellers.find((seller) => seller.id === item.seller);
+    const category = categories.find(
+        (category) => category.id === item.category
+    );
 
     return (
         <View style={tw`flex-1 py-10 bg-grayscale-20`}>
             <Header
-                title={item.category}
+                title={category?.name}
                 moreIconName="more-horizontal"
                 onMorePress={() => setDropdownVisible(!dropdownVisible)}
             />
 
-            <ModalReport visible={isReport} onClose={()=> setIsReport(false)}/>
+            <ModalReport
+                visible={isReport}
+                onClose={() => setIsReport(false)}
+            />
 
             <Dropdown
                 options={options}
@@ -131,7 +138,9 @@ const Product = () => {
                             size={14}
                         />
 
-                        <Text style={tw`text-grayscale-60 font-medium text-base`}>
+                        <Text
+                            style={tw`text-grayscale-60 font-medium text-base`}
+                        >
                             <Feather name="user" size={16} color="#787f8d" />{" "}
                             {seller ? seller.name : "Nome não disponível"}
                         </Text>
@@ -142,7 +151,9 @@ const Product = () => {
                         visible={isOpen}
                         onClose={() => setIsOpen(false)}
                     >
-                        <Text style={tw`text-grayscale-100 font-normal text-base`}>
+                        <Text
+                            style={tw`text-grayscale-100 font-normal text-base`}
+                        >
                             {item.description}
                         </Text>
                     </Modal>
@@ -152,14 +163,20 @@ const Product = () => {
                             Descrição
                         </Text>
                         <View>
-                            <Text style={tw`text-grayscale-100 font-normal text-base`}>
+                            <Text
+                                style={tw`text-grayscale-100 font-normal text-base`}
+                            >
                                 {item.description.length > maxLengthDescription
                                     ? truncatedDescription
                                     : item.description}
                             </Text>
                             {item.description.length > maxLengthDescription && (
-                                <TouchableOpacity onPress={() => setIsOpen(!isOpen)}>
-                                    <Text style={tw`text-primary font-medium text-base text-right`}>
+                                <TouchableOpacity
+                                    onPress={() => setIsOpen(!isOpen)}
+                                >
+                                    <Text
+                                        style={tw`text-primary font-medium text-base text-right`}
+                                    >
                                         Ler mais
                                     </Text>
                                 </TouchableOpacity>
@@ -181,26 +198,38 @@ const Product = () => {
                             Localização
                         </Text>
                         <View style={tw`flex-row justify-between`}>
-                            <Text style={tw`text-grayscale-60 font-medium text-base`}>
+                            <Text
+                                style={tw`text-grayscale-60 font-medium text-base`}
+                            >
                                 Estado
                             </Text>
-                            <Text style={tw`text-grayscale-100 font-medium text-base`}>
+                            <Text
+                                style={tw`text-grayscale-100 font-medium text-base`}
+                            >
                                 {item.location.state}
                             </Text>
                         </View>
                         <View style={tw`flex-row justify-between`}>
-                            <Text style={tw`text-grayscale-60 font-medium text-base`}>
+                            <Text
+                                style={tw`text-grayscale-60 font-medium text-base`}
+                            >
                                 Cidade
                             </Text>
-                            <Text style={tw`text-grayscale-100 font-medium text-base`}>
+                            <Text
+                                style={tw`text-grayscale-100 font-medium text-base`}
+                            >
                                 {item.location.city}
                             </Text>
                         </View>
                         <View style={tw`flex-row justify-between`}>
-                            <Text style={tw`text-grayscale-60 font-medium text-base`}>
+                            <Text
+                                style={tw`text-grayscale-60 font-medium text-base`}
+                            >
                                 Bairro
                             </Text>
-                            <Text style={tw`text-grayscale-100 font-medium text-base`}>
+                            <Text
+                                style={tw`text-grayscale-100 font-medium text-base`}
+                            >
                                 {item.location.neighborhood}
                             </Text>
                         </View>
@@ -215,17 +244,27 @@ const Product = () => {
                     <View style={tw`flex-col gap-y-3`}>
                         <View style={tw`flex-row justify-between`}>
                             <View style={tw`flex-row gap-x-1`}>
-                                <Text style={tw`text-grayscale-80 font-medium text-xl`}>
+                                <Text
+                                    style={tw`text-grayscale-80 font-medium text-xl`}
+                                >
                                     Opiniões sobre vendedor
                                 </Text>
-                                <Text style={tw`text-grayscale-60 font-medium text-xl`}>
+                                <Text
+                                    style={tw`text-grayscale-60 font-medium text-xl`}
+                                >
                                     ({item.comments?.length})
                                 </Text>
                             </View>
 
                             <View style={tw`flex-row items-center gap-x-1`}>
-                                <FontAwesome name="star" size={16} color="#fbfcff" />
-                                <Text style={tw`text-grayscale-80 font-medium text-xl`}>
+                                <FontAwesome
+                                    name="star"
+                                    size={16}
+                                    color="#fbfcff"
+                                />
+                                <Text
+                                    style={tw`text-grayscale-80 font-medium text-xl`}
+                                >
                                     {item.rate}
                                 </Text>
                             </View>
@@ -239,7 +278,9 @@ const Product = () => {
                             {item.comments?.map((comment, index) => (
                                 <TouchableOpacity
                                     key={index}
-                                    onPress={() => router.push(`/reviews/${seller?.id}`)}
+                                    onPress={() =>
+                                        router.push(`/reviews/${seller?.id}`)
+                                    }
                                     disabled={comment.comment.length < 100}
                                 >
                                     <ReviewCard comment={comment} />

@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 
 import tw from "../lib/tailwind";
-import { Comment } from "./items";
+import { Comment } from "../data/items";
 import { formatDate } from "../utils/formatDate";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Dropdown from "./dropdown";

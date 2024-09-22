@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
 import tw from "../lib/tailwind";
-import { Comment } from "./items";
+import { Comment } from "../data/items";
 import { formatDate } from "../utils/formatDate";
 
 interface ReviewCardProps {

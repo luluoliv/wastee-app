@@ -9,8 +9,8 @@ import Classification from "@/src/components/classification";
 import Button from "@/src/components/button";
 import Footer from "@/src/components/footer";
 import Item from "@/src/components/item";
-import { sellers } from "@/src/components/sellers";
-import { items } from "@/src/components/items";
+import { sellers } from "@/src/data/sellers";
+import { items } from "@/src/data/items";
 import ModalReport from "@/src/components/modalReport";
 
 const Seller = () => {

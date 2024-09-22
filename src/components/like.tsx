@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import tw from "@/src/lib/tailwind";
-import { ItemData } from "./items";
+import { ItemData } from "../data/items";
 
 interface LikeButtonProps {
     item: ItemData;

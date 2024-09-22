@@ -45,7 +45,7 @@ export const items: ItemData[] = [
             city: "São Paulo",
             neighborhood: "Casa Verde",
         },
-        category: "Smartphones",
+        category: "1",
         description:
             "O Smartphone EcoSmart Recondicionado é a escolha perfeita para quem quer tecnologia de ponta a um preço acessível. O modelo conta com tela HD de 6.5 polegadas, 64GB de armazenamento interno, câmera traseira de 12MP e processador octa-core. Ideal para quem busca desempenho e economia de forma sustentável. Além disso, o produto passou por uma inspeção rigorosa para garantir a qualidade e durabilidade.",
         favorited: true,
@@ -84,7 +84,7 @@ export const items: ItemData[] = [
             city: "São Paulo",
             neighborhood: "Casa Verde",
         },
-        category: "Smartphones",
+        category: "1",
         description:
             "O modelo 2023 do EcoSmart traz as mais recentes inovações tecnológicas, incluindo uma tela OLED de 6.7 polegadas, 128GB de armazenamento, câmera tripla de 48MP e bateria de 5000mAh com carregamento rápido. Perfeito para quem busca uma experiência fluida e moderna no uso diário. Além disso, o EcoSmart 2023 é compatível com a rede 5G, proporcionando maior velocidade de navegação.",
         favorited: false,
@@ -123,7 +123,7 @@ export const items: ItemData[] = [
             city: "Belo Horizonte",
             neighborhood: "Savassi",
         },
-        category: "Notebooks",
+        category: "3",
         description:
             "O EcoLaptop 2022 é um notebook versátil e potente, ideal para uso profissional e acadêmico. Com um processador Intel i7 de 10ª geração, 16GB de RAM, 512GB SSD e tela Full HD de 15.6 polegadas, oferece excelente desempenho para multitarefas e programas pesados. Além disso, sua estrutura fina e leve facilita o transporte, sendo ideal para quem está sempre em movimento.",
         favorited: true,
@@ -143,6 +143,84 @@ export const items: ItemData[] = [
                 date: "2024-09-13",
                 time: "09:30:00",
                 rating: 5,
+            },
+        ],
+    },
+    {
+        id: "4",
+        images: [
+            "https://via.placeholder.com/400x300?text=Imagem+1",
+            "https://via.placeholder.com/400x300?text=Imagem+2",
+        ],
+        title: "Smartwatch EcoWatch Series 5",
+        originalPrice: "R$1.299,90",
+        discountedPrice: "R$1.149,90",
+        rate: "4.7",
+        seller: "3",
+        location: {
+            state: "Rio de Janeiro",
+            city: "Rio de Janeiro",
+            neighborhood: "Copacabana",
+        },
+        category: "1",
+        description:
+            "O EcoWatch Series 5 é o acessório perfeito para quem busca tecnologia e estilo em um só produto. Equipado com monitoramento de frequência cardíaca, GPS, e resistência à água, este smartwatch é ideal para acompanhar suas atividades diárias e manter-se conectado com o mundo.",
+        favorited: false,
+        comments: [
+            {
+                user: "Guilherme",
+                comment:
+                    "Funciona muito bem, a bateria dura bastante e as funcionalidades são bem úteis para o dia a dia. Recomendo!",
+                date: "2024-09-10",
+                time: "11:00:00",
+                rating: 4,
+            },
+            {
+                user: "Beatriz",
+                comment:
+                    "Superou minhas expectativas! Uso para academia e corridas, e ele registra tudo com precisão.",
+                date: "2024-09-11",
+                time: "14:20:00",
+                rating: 5,
+            },
+        ],
+    },
+    {
+        id: "5",
+        images: [
+            "https://via.placeholder.com/400x300?text=Imagem+1",
+            "https://via.placeholder.com/400x300?text=Imagem+2",
+        ],
+        title: "Fone de Ouvido EcoPods Pro",
+        originalPrice: "R$799,90",
+        discountedPrice: "R$749,90",
+        rate: "4.6",
+        seller: "4",
+        location: {
+            state: "Bahia",
+            city: "Salvador",
+            neighborhood: "Barra",
+        },
+        category: "6",
+        description:
+            "Os EcoPods Pro oferecem uma experiência sonora imersiva com cancelamento de ruído ativo e som de alta qualidade. Com bateria de longa duração e um design compacto, eles são perfeitos para o uso diário e viagens.",
+        favorited: true,
+        comments: [
+            {
+                user: "Lucas",
+                comment:
+                    "Excelente qualidade de som e o cancelamento de ruído é muito eficiente. Vale a pena o investimento.",
+                date: "2024-09-12",
+                time: "16:10:00",
+                rating: 5,
+            },
+            {
+                user: "Sofia",
+                comment:
+                    "Muito confortável e a bateria dura bastante. Uso para trabalhar e ouvir música.",
+                date: "2024-09-13",
+                time: "08:45:00",
+                rating: 4,
             },
         ],
     },

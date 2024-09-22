@@ -1,22 +1,33 @@
 import React from "react";
 import { View, FlatList, TouchableOpacity } from "react-native";
-import { useForm } from "react-hook-form";
+import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import tw from "@/src/lib/tailwind";
 
+import { items } from "@/src/data/items";
 import Item from "@/src/components/item";
-import { items } from "@/src/components/items";
+import InputText from "@/src/components/inputText";
 
 export default function Home() {
     const router = useRouter();
-    const { control } = useForm();
 
     const handleItemPress = (id: string) => {
         router.push(`/product/${id}`);
     };
 
     return (
-        <View style={tw`w-full flex-1 pt-10 bg-grayscale-20`}>
+        <View style={tw`w-full flex-1 pt-10 px-3 gap-y-4 bg-grayscale-20`}>
+            <InputText
+                placeholder="Pesquisar"
+                leftSideContent={
+                    <Feather
+                        name="search"
+                        size={20}
+                        color={tw.color("text-grayscale-60")}
+                    />
+                }
+                onFocusNavigate
+            />
             <FlatList
                 data={items}
                 renderItem={({ item }) => (
@@ -25,7 +36,6 @@ export default function Home() {
                     </TouchableOpacity>
                 )}
                 keyExtractor={(item) => item.id}
-                contentContainerStyle={tw`p-4`}
                 columnWrapperStyle={tw`justify-between mb-4`}
                 numColumns={2}
             />

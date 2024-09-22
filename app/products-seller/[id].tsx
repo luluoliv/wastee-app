@@ -4,8 +4,8 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 
 import Header from "@/src/components/header";
 import tw from "@/src/lib/tailwind";
-import { sellers } from "@/src/components/sellers";
-import { items } from "@/src/components/items";
+import { sellers } from "@/src/data/sellers";
+import { items } from "@/src/data/items";
 import Item from "@/src/components/item";
 
 const ProductsSeller = () => {

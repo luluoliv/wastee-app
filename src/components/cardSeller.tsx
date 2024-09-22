@@ -5,8 +5,8 @@ import { useRouter } from "expo-router";
 
 import tw from "../lib/tailwind";
 import Button from "./button";
-import { ItemData, items } from "./items";
-import { sellers } from "./sellers";
+import { ItemData, items } from "../data/items";
+import { sellers } from "../data/sellers";
 
 interface CardSellerProps {
     item: ItemData | undefined;

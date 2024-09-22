@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { Comment } from "@/src/components/items";
+import { Comment } from "@/src/data/items";
 import tw from "../lib/tailwind";
 
 interface ClassificationProps {

@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import Header from "@/src/components/header";
 import tw from "@/src/lib/tailwind";
 import CardSeller from "@/src/components/cardSeller";
-import { items } from "@/src/components/items";
+import { items } from "@/src/data/items";
 import Button from "@/src/components/button";
 import Review from "@/src/components/review";
 
