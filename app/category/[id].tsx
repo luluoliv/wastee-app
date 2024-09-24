@@ -12,14 +12,14 @@ const Category = () => {
     const { id } = useLocalSearchParams<{ id: string }>();
 
     const category = categories.find((category) => category?.id === id);
-    const filteredItems = items.find((item) => item?.category === category?.id);
+    const filteredItems = items.filter((item) => item.category === category?.id);
 
     const handleItemPress = (id: string) => {
         router.push(`/product/${id}`);
     };
 
     return (
-        <View style={tw`flex-1 py-10 bg-grayscale-20`}>
+        <View style={tw`flex-1 py-10 px-3 bg-grayscale-20`}>
             <Header title={category?.name} moreIconName="share-2" />
             <Text style={tw`text-xl font-medium text-grayscale-60 text-right`}>
                 Mais recentes
