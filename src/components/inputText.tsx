@@ -2,28 +2,33 @@ import { View, TextInput, Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import tw from "../lib/tailwind";
 import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useRouter, useSegments } from "expo-router";
 
 export interface InputTextProps {
     leftSideContent?: React.ReactNode;
     placeholder: string;
+    value: string;
+    onChangeText: (text: string) => void;
     onFocusNavigate?: boolean;
 }
 
 const InputText: React.FC<InputTextProps> = ({
     leftSideContent,
     placeholder,
+    value,
+    onChangeText,
     onFocusNavigate,
 }) => {
     const [focused, setFocused] = useState(false);
-    const [value, setValue] = useState("");
     const router = useRouter();
+    const segments = useSegments();
 
     useEffect(() => {
-        if (focused && onFocusNavigate) {
+        if (focused && onFocusNavigate && !segments.includes("search")) {
+            setFocused(false);
             router.push("/search");
         }
-    }, [focused, onFocusNavigate]);
+    }, [focused, onFocusNavigate, segments]);
 
     return (
         <View style={tw`w-full flex-row items-center gap-x-2`}>
@@ -31,9 +36,7 @@ const InputText: React.FC<InputTextProps> = ({
                 style={tw`relative m-auto w-full h-12 bg-grayscale-40 flex flex-row items-center border rounded-xl px-4 py-3`}
             >
                 {leftSideContent && (
-                    <View style={tw`pr-2.5 justify-center`}>
-                        {leftSideContent}
-                    </View>
+                    <View style={tw`pr-2.5 justify-center`}>{leftSideContent}</View>
                 )}
 
                 {!focused && !value && (
@@ -48,7 +51,7 @@ const InputText: React.FC<InputTextProps> = ({
 
                 <TextInput
                     value={value}
-                    onChangeText={setValue}
+                    onChangeText={onChangeText} // Use onChangeText prop
                     onFocus={() => setFocused(true)}
                     onBlur={() => setFocused(false)}
                     placeholderTextColor={tw.color("text-grayscale-60")}
@@ -57,10 +60,10 @@ const InputText: React.FC<InputTextProps> = ({
                 />
             </View>
 
-            {value.length > 0 && (
+            {value?.length > 0 && (
                 <TouchableOpacity
                     style={tw`absolute right-4 bg-grayscale-40`}
-                    onPress={() => setValue("")}
+                    onPress={() => onChangeText("")}
                 >
                     <Feather
                         name="x-circle"
@@ -72,5 +75,6 @@ const InputText: React.FC<InputTextProps> = ({
         </View>
     );
 };
+
 
 export default InputText;
