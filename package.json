@@ -43,7 +43,8 @@
     "react-native-screens": "3.31.1",
     "react-native-web": "~0.19.10",
     "twrnc": "^4.5.1",
-    "expo-insights": "~0.7.0"
+    "expo-insights": "~0.7.0",
+    "expo-dev-client": "~4.0.27"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
