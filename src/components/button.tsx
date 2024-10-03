@@ -55,7 +55,7 @@ const Button: React.FC<ButtonProps> = ({
                     />
                 )}
                 <Text style={[tw`text-grayscale-100 text-base font-semibold`, textStyle]}>
-                    {loading ? "Loading..." : title}
+                    {loading ? "Carregando..." : title}
                 </Text>
             </View>
         </TouchableOpacity>
