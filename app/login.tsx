@@ -31,6 +31,7 @@ const Login = () => {
             await login({ email: data.email, password: data.password });
             console.log(data);
 
+
             router.replace("/home");
         } catch (error: any) {
             Alert.alert(

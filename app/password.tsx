@@ -15,7 +15,7 @@ const Password = () => {
         handleSubmit,
         getValues,
         formState: { errors, isValid },
-    } = useForm({ mode: "onChange" });
+    } = useForm();
 
     const onSubmit = (data: any) => {
         console.log(data);

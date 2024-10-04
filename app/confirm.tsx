@@ -47,7 +47,11 @@ const Confirm = () => {
 
     useEffect(() => {
         if (code.every((digit) => digit !== "")) {
-            router.push("/password"); 
+            const joinedCode = code.join('');
+            router.push({
+                pathname: "/password", 
+                params: { email, code: joinedCode } 
+            });
         }
     }, [code]);
 
