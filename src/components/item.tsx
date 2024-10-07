@@ -3,15 +3,15 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
-import { ItemData } from "../data/items";
 import tw from "@/src/lib/tailwind";
 import Dropdown from "./dropdown";
 import ModalReport from "./modalReport";
 import { sellers } from "../data/sellers";
 import LikeButton from "./like";
+import { ProductResponse } from "../service/productsService";
 
 interface ItemProps {
-    data: ItemData;
+    data: ProductResponse;
     likable?: boolean;
 }
 

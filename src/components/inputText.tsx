@@ -7,8 +7,8 @@ import { useRouter, useSegments } from "expo-router";
 export interface InputTextProps {
     leftSideContent?: React.ReactNode;
     placeholder: string;
-    value: string;
-    onChangeText: (text: string) => void;
+    value?: string;
+    onChangeText?: (text: string) => void;
     onFocusNavigate?: boolean;
 }
 

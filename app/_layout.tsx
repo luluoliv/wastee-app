@@ -45,7 +45,7 @@ export default function RootLayout() {
                     <Stack.Screen name="initial" />
                     <Stack.Screen name="register" />
                     <Stack.Screen name="confirm" />
-                    <Stack.Screen name="password" />
+                    <Stack.Screen name="password/[id]" />
                     <Stack.Screen name="tutorial" />
                     <Stack.Screen name="(tabs)" />
                     <Stack.Screen name="search" />
