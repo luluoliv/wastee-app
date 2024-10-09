@@ -6,7 +6,6 @@ import { useRouter } from "expo-router";
 import tw from "@/src/lib/tailwind";
 import Dropdown from "./dropdown";
 import ModalReport from "./modalReport";
-import { sellers } from "../data/sellers";
 import LikeButton from "./like";
 import { ProductResponse } from "../service/productsService";
 
@@ -20,20 +19,18 @@ const Item: React.FC<ItemProps> = ({ data, likable }) => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [isReport, setIsReport] = useState(false);
 
-    const seller = sellers.find((seller) => data.seller == seller.id);
-
-    const hasDiscount = !!data.discountedPrice;
+    const hasDiscount = !!data?.discounted_price;
 
     const options = [
         {
-            label: data.favorited ? "Descurtir" : "Curtir",
+            label: data?.favorited ? "Descurtir" : "Curtir",
             icon: "heart",
-            action: () => console.log("produto curtido."),
+            action: () => console.log("Produto curtido."),
         },
         {
             label: "Visitar vendedor",
             icon: "user",
-            action: () => router.push(`/seller/${data.id}`),
+            action: () => data?.id && router.push(`/seller/${data.id}`),
         },
         {
             label: "Compartilhar",
@@ -47,6 +44,16 @@ const Item: React.FC<ItemProps> = ({ data, likable }) => {
         },
     ];
 
+    if (!data) {
+        return (
+            <View style={tw`p-4 bg-red-100 rounded`}>
+                <Text style={tw`text-red-500`}>
+                    Dados do produto não disponíveis
+                </Text>
+            </View>
+        );
+    }
+
     return (
         <View style={tw`w-[168px]`}>
             <Dropdown
@@ -57,22 +64,27 @@ const Item: React.FC<ItemProps> = ({ data, likable }) => {
             />
             <View style={tw`relative w-full`}>
                 <Image
-                    source={{ uri: data?.images[0] }}
+                    source={{
+                        uri:
+                            data.images?.[0] ??
+                            "https://via.placeholder.com/150",
+                    }}
                     style={tw`w-[168px] h-[168px] rounded-xl`}
                     resizeMode="cover"
                 />
-                <View
-                    style={tw`absolute flex-row bottom-2 left-2 bg-grayscale-20 bg-opacity-50 p-1 rounded`}
-                >
-                    <Text style={tw`text-grayscale-100 text-xs`}>★</Text>
-                    {data.rate && (
+
+                {data.rate && (
+                    <View
+                        style={tw`absolute flex-row bottom-2 left-2 bg-grayscale-20 bg-opacity-50 p-1 rounded`}
+                    >
+                        <Text style={tw`text-grayscale-100 text-xs`}>★</Text>
                         <Text
                             style={tw`text-grayscale-100 font-semibold text-xs ml-1`}
                         >
                             {data.rate}
                         </Text>
-                    )}
-                </View>
+                    </View>
+                )}
                 <ModalReport
                     visible={isReport}
                     onClose={() => setIsReport(false)}
@@ -88,7 +100,7 @@ const Item: React.FC<ItemProps> = ({ data, likable }) => {
                             item={data}
                             size="small"
                             onFavoriteToggle={(id) =>
-                                console.log(`item ${id} favoritado.`)
+                                console.log(`Item ${id} favoritado.`)
                             }
                         />
                     ) : (
@@ -102,7 +114,7 @@ const Item: React.FC<ItemProps> = ({ data, likable }) => {
             </View>
             <View style={tw`mt-2 w-full`}>
                 <Text style={tw`text-sm font-medium text-grayscale-80`}>
-                    {data.title}
+                    {data.title || "Título indisponível"}
                 </Text>
                 <View style={tw`flex-row gap-x-1 items-center`}>
                     <Text
@@ -113,18 +125,18 @@ const Item: React.FC<ItemProps> = ({ data, likable }) => {
                                 : tw`text-grayscale-100`,
                         ]}
                     >
-                        {data.originalPrice}
+                        {data.original_price || "Preço não disponível"}
                     </Text>
                     {hasDiscount && (
                         <Text
                             style={tw`text-sm font-semibold text-grayscale-60 line-through`}
                         >
-                            {data.discountedPrice}
+                            {data.discounted_price}
                         </Text>
                     )}
                 </View>
                 <Text style={tw`text-sm font-medium text-grayscale-60`}>
-                    {seller?.name}
+                    {data.seller_name || "Vendedor desconhecido"}
                 </Text>
             </View>
         </View>

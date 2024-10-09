@@ -1,11 +1,11 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import tw from "@/src/lib/tailwind";
-import { ItemData } from "../data/items";
+import { ProductResponse } from "../service/productsService";
 
 interface LikeButtonProps {
-    item: ItemData;
+    item: ProductResponse;
     size?: "small" | "large";
     onFavoriteToggle: (id: string) => void; 
 }

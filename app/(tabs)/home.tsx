@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, TouchableOpacity, ActivityIndicator, Text } from "react-native";
+import {
+    View,
+    FlatList,
+    TouchableOpacity,
+    ActivityIndicator,
+    Text,
+} from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import tw from "@/src/lib/tailwind";
@@ -19,6 +25,7 @@ export default function Home() {
             try {
                 const response = await getAllProducts();
                 setProducts(response);
+                console.log(response);
             } catch (err: any) {
                 setError(err.message || "Erro ao carregar produtos.");
             } finally {
@@ -35,7 +42,9 @@ export default function Home() {
 
     if (loading) {
         return (
-            <View style={tw`flex-1 justify-center items-center bg-grayscale-20`}>
+            <View
+                style={tw`flex-1 justify-center items-center bg-grayscale-20`}
+            >
                 <ActivityIndicator size="large" color={"#fff"} />
             </View>
         );
@@ -43,7 +52,7 @@ export default function Home() {
 
     if (error) {
         return (
-            <View style={tw`flex-1 justify-center items-center`}>
+            <View style={tw`flex-1 justify-center items-center bg-grayscale-20`}>
                 <Text style={tw`text-red-500`}>{error}</Text>
             </View>
         );
@@ -66,7 +75,7 @@ export default function Home() {
                 data={products}
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => handleItemPress(item.id)}>
-                        <Item data={item} />
+                        <Item data={item || {}} />
                     </TouchableOpacity>
                 )}
                 keyExtractor={(item) => item.id}

@@ -2,10 +2,12 @@ import apiService from "./apiService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setToken } from "../utils/setToken";
 import axios from "axios";
+import { User } from "../contexts/UserContext";
 
 interface AuthResponse {
     access: string;
     refresh?: string;
+    user: User | null;
 }
 
 interface LoginCredentials {
@@ -25,7 +27,7 @@ interface ConfirmCredentials {
 
 interface ConfirmResponse {
     message: string;
-    user_id: string; 
+    user_id: string;
 }
 interface SetPasswordCredentials {
     email: string | string[];
@@ -33,7 +35,7 @@ interface SetPasswordCredentials {
     user_id: string;
 }
 
-export const login = async (credentials: LoginCredentials): Promise<void> => {
+export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
     try {
         await AsyncStorage.removeItem("access");
         await AsyncStorage.removeItem("refresh");
@@ -41,13 +43,15 @@ export const login = async (credentials: LoginCredentials): Promise<void> => {
             "login/",
             credentials
         );
-        const { access, refresh } = response.data;
+        const { access, refresh, user } = response.data;
 
         await setToken(access);
 
         if (refresh) {
             await AsyncStorage.setItem("refresh", refresh);
         }
+
+        return { access, refresh, user };
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(
@@ -87,7 +91,7 @@ export const confirm = async (
     credentials: ConfirmCredentials
 ): Promise<ConfirmResponse> => {
     try {
-      const response =  await apiService.post<ConfirmResponse>(
+        const response = await apiService.post<ConfirmResponse>(
             "confirm/",
             credentials
         );
@@ -108,9 +112,9 @@ export const setPassword = async (
     credentials: SetPasswordCredentials
 ): Promise<void> => {
     try {
-        const { user_id, password, email } = credentials; 
+        const { user_id, password, email } = credentials;
         const response = await apiService.put<AuthResponse>(
-            `set-password/${user_id}/`, 
+            `set-password/${user_id}/`,
             { password, email }
         );
 

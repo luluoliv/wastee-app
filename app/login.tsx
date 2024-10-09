@@ -9,6 +9,7 @@ import Input from "@/src/components/input";
 import { blurBottom } from "@/src/utils/imports";
 
 import { login } from "../src/service/authService";
+import { useUser } from "@/src/contexts/UserContext";
 
 interface LoginFormInputs {
     email: string;
@@ -18,6 +19,7 @@ interface LoginFormInputs {
 const Login = () => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const { setUser } = useUser();
 
     const {
         control,
@@ -28,10 +30,9 @@ const Login = () => {
     const onSubmit = async (data: { email: string; password: string }) => {
         setIsLoading(true);
         try {
-            await login({ email: data.email, password: data.password });
-            console.log(data);
+            const response = await login({ email: data.email, password: data.password });
 
-
+            setUser(response.user);
             router.replace("/home");
         } catch (error: any) {
             Alert.alert(

@@ -4,18 +4,20 @@ import { getRandomColor } from "../utils/getRandomColor";
 import tw from "../lib/tailwind";
 
 interface AvatarProps {
-    user: string;
+    user?: string; 
 }
 
 const Avatar: React.FC<AvatarProps> = ({ user }) => {
     const backgroundColor = getRandomColor();
-
+    
     const initials = user
-        .split(" ")
-        .map((name) => name.charAt(0))
-        .join("")
-        .slice(0, 2)
-        .toUpperCase();
+        ? user
+            .split(" ")
+            .map((name) => name.charAt(0))
+            .join("")
+            .slice(0, 2)
+            .toUpperCase()
+        : "??";
 
     return (
         <View style={[tw`w-14 h-14 rounded-full`, { backgroundColor }]}>
