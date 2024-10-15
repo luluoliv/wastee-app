@@ -18,8 +18,12 @@ export interface ProductResponse {
 }
 
 interface NewProduct {
-    name: string;
-    price: number;
+    title: string;
+    original_price: number;
+    description: string;
+    images: string[];
+    category: string;
+    category_id: number;
 }
 
 interface UpdateProduct {
@@ -53,7 +57,7 @@ export const getProductBySellerId = async (
     try {
         const response = await apiService.get<ProductResponse[]>(
             `products?seller_id=${seller_id}`
-        );        
+        );
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
@@ -91,7 +95,12 @@ export const createProduct = async (
     try {
         const response = await apiService.post<ProductResponse>(
             "products/",
-            product
+            product,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            }
         );
         return response.data;
     } catch (error) {
