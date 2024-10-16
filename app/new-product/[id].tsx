@@ -6,7 +6,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 
 import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 import tw from "@/src/lib/tailwind";
 import Input from "@/src/components/input";
@@ -15,6 +15,7 @@ import InputDropdown from "@/src/components/inputDropdown";
 import { createProduct } from "@/src/service/productsService";
 
 const NewProduct = () => {
+    const { id } = useLocalSearchParams();
     const router = useRouter();
     const {
         control,
@@ -23,34 +24,38 @@ const NewProduct = () => {
     } = useForm();
 
     const [selectedImages, setSelectedImages] = useState<string[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState<Number>();
+    const [selectedCategory, setSelectedCategory] = useState<
+        number | undefined
+    >();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const onSubmit = async (form: any) => {
         setIsLoading(true);
 
-        const base64Images = await Promise.all(
-            selectedImages.map(async (imageUri) => {
-                const base64 = await FileSystem.readAsStringAsync(imageUri, {
-                    encoding: FileSystem.EncodingType.Base64,
-                });
-                const blob = new Blob([base64], { type: "image/jpeg" });
-                console.log(blob);
-                
-                return blob;
-            })
-        );
+        const formData = new FormData();
+        formData.append("title", form.title);
+        formData.append("description", form.description);
+        formData.append("category_id", form.selectedCategory);
+        formData.append("original_price", form.original_price);
+        formData.append('seller_id', id);
 
-        const data = {
-            ...form,
-            category_id: parseInt(selectedCategory),
-            images: base64Images,
-        };
+        selectedImages.forEach((image, index) => {
+            const file = {
+                uri: image, // This should be the path to the image
+                type: "image/jpeg", // Adjust the type accordingly
+                name: `photo_${index}.jpg`, // Name of the file
+            };
+            // Use the `append` method of FormData correctly
+            console.log(file);
+            formData.append(`images`, file as any); // Cast to any to avoid type errors
+        });
 
-        console.log(data);
+        console.log(selectedImages);
+
+        console.log(formData);
 
         try {
-            await createProduct(data);
+            await createProduct(formData); // Ensure createProduct handles FormData correctly
         } catch (error) {
             console.log(error);
         } finally {

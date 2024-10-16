@@ -90,7 +90,7 @@ export const getAllProducts = async (): Promise<ProductResponse[]> => {
 };
 
 export const createProduct = async (
-    product: NewProduct
+    product: NewProduct | FormData
 ): Promise<ProductResponse> => {
     try {
         const response = await apiService.post<ProductResponse>(

@@ -43,6 +43,8 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
             "login/",
             credentials
         );
+        console.log(response);
+        
         const { access, refresh, user } = response.data;
 
         await setToken(access);

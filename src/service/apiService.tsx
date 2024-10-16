@@ -1,4 +1,3 @@
-// src/services/apiService.ts
 import axios, { AxiosInstance } from "axios";
 import { getToken } from "../utils/getToken";
 
