@@ -67,7 +67,7 @@ export default function Add() {
                         produtos.
                     </Text>
                     <Button
-                        onPress={() => router.replace("/sell-forms")}
+                        onPress={() => router.push("/sell-forms")}
                         icon="user-plus"
                         title="Quero me tornar um vendedor"
                         style={tw`bg-grayscale-100`}

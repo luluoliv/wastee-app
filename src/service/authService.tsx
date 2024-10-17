@@ -43,7 +43,6 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
             "login/",
             credentials
         );
-        console.log(response);
         
         const { access, refresh, user } = response.data;
 
@@ -77,7 +76,6 @@ export const register = async (
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response) {
-                console.log(error);
                 const { email, name } = error.response.data;
                 throw new Error(email || name);
             } else {

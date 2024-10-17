@@ -30,7 +30,6 @@ const Register = () => {
 
         try {
             await register({ email: data.email, name: data.name });
-            console.log(data);
 
             router.push({
                 pathname: "/confirm",

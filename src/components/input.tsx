@@ -18,6 +18,7 @@ import {
     Merge,
 } from "react-hook-form";
 import { Feather } from "@expo/vector-icons";
+import { TextInputMask } from "react-native-masked-text";
 
 export interface InputProps
     extends Omit<TextInputProps, "defaultValue">,
@@ -31,13 +32,15 @@ export interface InputProps
         | string
         | FieldError
         | Merge<FieldError, FieldErrorsImpl<any>>
-        | undefined | null;
-    control: Control<any>;
+        | undefined
+        | null;
+    control?: Control<any>;
+    mask?: string;
 }
 
 const Input: FC<InputProps> = forwardRef(
     (
-        { leftSideContent, rightSideContent, error, label, control, ...props },
+        { leftSideContent, rightSideContent, error, label, control, mask, ...props },
         ref: Ref<TextInput>
     ) => {
         const [focused, setFocused] = useState(false);
@@ -72,7 +75,7 @@ const Input: FC<InputProps> = forwardRef(
         const measureInput = (e: LayoutChangeEvent) => {
             const height = e.nativeEvent.layout.height;
             if (inputHeight !== height) {
-                setInputHeight(e.nativeEvent.layout.height);
+                setInputHeight(height);
             }
         };
 
@@ -82,6 +85,10 @@ const Input: FC<InputProps> = forwardRef(
                 : error && "message" in error
                 ? error.message
                 : "";
+
+        const handleChangeText = (text: string) => {
+            field.onChange(text);
+        };
 
         return (
             <View style={tw`w-full`}>
@@ -95,11 +102,11 @@ const Input: FC<InputProps> = forwardRef(
                             : "border-grayscale-60"
                     )}
                 >
-                    {leftSideContent ? (
+                    {leftSideContent && (
                         <View style={tw`pr-2.5 justify-center text-sm`}>
                             {leftSideContent}
                         </View>
-                    ) : null}
+                    )}
                     <Animated.Text
                         style={tw.style(
                             "absolute left-3 text-grayscale-60",
@@ -120,25 +127,37 @@ const Input: FC<InputProps> = forwardRef(
                         {label}
                     </Animated.Text>
 
-                    <TextInput
-                        {...props}
-                        ref={ref}
-                        onLayout={measureInput}
-                        onChangeText={field.onChange}
-                        onBlur={handleBlur}
-                        onFocus={handleFocus}
-                        style={tw`w-full bg-transparent text-grayscale-100`}
-                        value={field.value}
-                        secureTextEntry={secureTextEntry && !isPasswordVisible}
-                    />
+                    {mask ? (
+                        <TextInputMask
+                            type="custom"
+                            options={{ mask }}
+                            {...props}
+                            ref={ref as Ref<TextInputMask>}
+                            onLayout={measureInput}
+                            onChangeText={handleChangeText}
+                            onBlur={handleBlur}
+                            onFocus={handleFocus}
+                            style={tw`w-full bg-transparent text-grayscale-100`}
+                            value={field.value}
+                        />
+                    ) : (
+                        <TextInput
+                            {...props}
+                            ref={ref}
+                            onLayout={measureInput}
+                            onChangeText={handleChangeText}
+                            onBlur={handleBlur}
+                            onFocus={handleFocus}
+                            style={tw`w-full bg-transparent text-grayscale-100`}
+                            value={field.value}
+                            secureTextEntry={secureTextEntry && !isPasswordVisible}
+                        />
+                    )}
+
                     {rightSideContent || secureTextEntry ? (
-                        <View
-                            style={tw`absolute right-3`}
-                        >
+                        <View style={tw`absolute right-3`}>
                             <TouchableOpacity
-                                onPress={() =>
-                                    setIsPasswordVisible((prev) => !prev)
-                                }
+                                onPress={() => setIsPasswordVisible((prev) => !prev)}
                             >
                                 <Feather
                                     name={isPasswordVisible ? "eye" : "eye-off"}
@@ -149,11 +168,12 @@ const Input: FC<InputProps> = forwardRef(
                         </View>
                     ) : null}
                 </View>
-                {errorMessage ? (
+
+                {errorMessage && (
                     <Text style={tw`text-red-600 text-xs pt-2 font-light`}>
                         {errorMessage}
                     </Text>
-                ) : null}
+                )}
             </View>
         );
     }

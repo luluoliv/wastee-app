@@ -71,19 +71,6 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="news"
-                options={{
-                    tabBarIcon: ({ focused, color }) => (
-                        <FontAwesome
-                            fill={focused ? "white" : ""}
-                            size={24}
-                            name="newspaper-o"
-                            color={color}
-                        />
-                    ),
-                }}
-            />
-            <Tabs.Screen
                 name="perfil"
                 options={{
                     tabBarIcon: ({ focused, color }) => (

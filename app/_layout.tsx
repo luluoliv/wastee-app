@@ -63,6 +63,7 @@ export default function RootLayout() {
                             <Stack.Screen name="settings/[id]" />
                             <Stack.Screen name="seller/[id]" />
                             <Stack.Screen name="sell-forms" />
+                            <Stack.Screen name="location" />
                         </Stack>
                     </GestureHandlerRootView>
                 </PaperProvider>
