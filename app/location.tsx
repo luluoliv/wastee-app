@@ -1,27 +1,36 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import React, { useState } from "react";
 import tw from "@/src/lib/tailwind";
 import Header from "@/src/components/header";
 import Input from "@/src/components/input";
 import { useForm, Controller } from "react-hook-form";
 import Button from "@/src/components/button";
+import { createSeller, NewSeller } from "@/src/service/sellerService";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { transformDateToISO } from "@/src/utils/transformDateToISO";
+import { useUser } from "@/src/contexts/UserContext";
 
-interface SellerFormInputs {
-    postal_code: string;
-    state: string;
-    city: string;
-    neighborhood: string;
-    user: string | number;
-}
+type LocationRouteParams = {
+    cpf: string;
+    birthDate: string;
+    selectedRG: string;
+    selectedSelfie: string;
+};
 
 const Location = () => {
     const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const route =
+        useRoute<RouteProp<{ params: LocationRouteParams }, "params">>();
+    const { cpf, birthDate, selectedRG, selectedSelfie } = route.params;
+    const { user } = useUser();
+
     const {
         control,
         formState: { errors },
         watch,
         handleSubmit,
-    } = useForm<SellerFormInputs>();
+    } = useForm<NewSeller>();
 
     const isFormComplete =
         watch("postal_code") &&
@@ -30,28 +39,69 @@ const Location = () => {
         watch("neighborhood") &&
         termsAccepted;
 
-    const onSubmit = async (data: SellerFormInputs) => {};
+    const onSubmit = async (form: NewSeller) => {
+        const parsedRG = JSON.parse(selectedRG);
+        const parsedSelfie = JSON.parse(selectedSelfie);
+    
+        const data = new FormData();
+    
+        // Append all form fields, ensuring all required fields are included
+        data.append('postal_code', form.postal_code.replace(/\D/g, ""));  // Clean postal code
+        data.append('cpf', cpf);  // Append CPF from params
+        data.append('birth_date', transformDateToISO(birthDate));  // Convert birth date to ISO format
+        data.append('state', form.state);  // Append state
+        data.append('city', form.city);  // Append city
+        data.append('neighborhood', form.neighborhood);  // Append neighborhood
+        data.append('user', '10');  // User ID (example)
+        data.append('user_id', '10');  // Append user_id explicitly
+    
+        // Append RG and Selfie as files
+        data.append('rg', {
+            uri: parsedRG.uri,
+            name: parsedRG.name,
+            type: parsedRG.type,
+        });
+    
+        data.append('selfie_document', {
+            uri: parsedSelfie.uri,
+            name: parsedSelfie.name,
+            type: parsedSelfie.type,
+        });
+
+        console.log(data);
+        
+    
+        setIsLoading(true);
+        try {
+            await createSeller(data);  // Submit form data
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
 
     return (
-        <View style={tw`w-full flex-1 pt-10 gap-y-5 bg-grayscale-20`}>
+        <View style={tw`w-full flex-1 pt-10 bg-grayscale-20`}>
             <Header
                 title="Se torne um vendedor"
                 titleStyle={tw`text-grayscale-100`}
                 moreIconName=""
             />
-            <View style={tw`w-full px-5 gap-y-5`}>
+            <ScrollView contentContainerStyle={tw`flex-grow px-5`}>
                 <Text style={tw`font-medium text-grayscale-100 text-xl`}>
                     Endereço
                 </Text>
 
-                <View style={tw`gap-y-3`}>
+                <View style={tw`gap-y-3 mt-5`}>
                     <Controller
                         control={control}
                         name="postal_code"
                         rules={{ required: "CEP é obrigatório" }}
                         render={({ field }) => (
                             <Input
-                            mask="99999-999"
+                                mask="99999-999"
                                 control={control}
                                 label="CEP"
                                 {...field}
@@ -102,40 +152,46 @@ const Location = () => {
                         )}
                     />
                 </View>
+            </ScrollView>
 
-                <View style={tw``}>
-                    <View style={tw`flex-row gap-x-2 items-center`}>
-                        <TouchableOpacity
-                            onPress={() => setTermsAccepted(true)}
+            <View
+                style={tw`absolute bottom-0 w-full px-5 py-5 bg-grayscale-20`}
+            >
+                <View style={tw`flex-row gap-x-2 items-center mb-5`}>
+                    <TouchableOpacity
+                        onPress={() => setTermsAccepted(!termsAccepted)}
+                    >
+                        <View
+                            style={tw`w-5 h-5 border border-gray-300 rounded-full flex items-center justify-center`}
                         >
-                            <View
-                                style={tw`w-5 h-5 border border-gray-300 rounded-full flex items-center justify-center`}
-                            >
-                                {termsAccepted && (
-                                    <View
-                                        style={tw`w-3 h-3 bg-grayscale-100 rounded-full`}
-                                    />
-                                )}
-                            </View>
-                        </TouchableOpacity>
-                        <Text style={tw`text-grayscale-100`}>
-                            Eu li e concordo com os{" "}
-                            <Text style={tw`text-primary`}>Termos de Serviço</Text>
-                            {"\n"} e <Text style={tw`text-primary`}>Política de Privacidade</Text> de ser um vendedor.
-                        </Text>
-                    </View>
-                    <Button
-                        onPress={handleSubmit(onSubmit)}
-                        title="Finalizar"
-                        disabled={!isFormComplete}
-                        style={tw`${
-                            isFormComplete
-                                ? "bg-grayscale-100"
-                                : "bg-grayscale-60"
-                        } mt-5`}
-                        textStyle={tw`text-grayscale-20`}
-                    />
+                            {termsAccepted && (
+                                <View
+                                    style={tw`w-3 h-3 bg-grayscale-100 rounded-full`}
+                                />
+                            )}
+                        </View>
+                    </TouchableOpacity>
+                    <Text style={tw`text-grayscale-100`}>
+                        Eu li e concordo com os{" "}
+                        <Text style={tw`text-primary`}>Termos de Serviço</Text>
+                        {"\n"}e{" "}
+                        <Text style={tw`text-primary`}>
+                            Política de Privacidade
+                        </Text>{" "}
+                        de ser um vendedor.
+                    </Text>
                 </View>
+
+                <Button
+                    loading={isLoading}
+                    onPress={handleSubmit(onSubmit)}
+                    title="Finalizar"
+                    disabled={!isFormComplete || isLoading}
+                    style={tw`${
+                        isFormComplete ? "bg-grayscale-100" : "bg-grayscale-60"
+                    }`}
+                    textStyle={tw`text-grayscale-20`}
+                />
             </View>
         </View>
     );

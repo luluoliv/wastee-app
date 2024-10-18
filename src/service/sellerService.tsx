@@ -3,7 +3,10 @@ import axios from "axios";
 
 export interface SellerResponse {
     id: string;
-    address: string;
+    cpf: number;
+    birth_date: string;
+    rg: string;
+    selfie_document: string;
     postal_code: string;
     state: string;
     city: string;
@@ -12,12 +15,15 @@ export interface SellerResponse {
     user: number;
 }
 
-interface NewSeller {
-    address: string;
+export interface NewSeller {
     postal_code: string;
     state: string;
     city: string;
     neighborhood: string;
+    cpf: string;
+    birth_date: string;
+    rg: string[];
+    selfie_document: string[];
     user: number;
 }
 
@@ -86,9 +92,11 @@ export const getAllSellers = async (): Promise<SellerResponse[]> => {
 
 export const createSeller = async (
     seller: NewSeller
-): Promise<SellerResponse> => {
+): Promise<NewSeller> => {
     try {
-        const response = await apiService.post<SellerResponse>("sellers/", seller);
+        const response = await apiService.post<NewSeller>("sellers/", seller, {headers: {
+            "Content-Type": "multipart/form-data"
+        }});
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {

@@ -55,7 +55,7 @@ const NewProduct = () => {
         console.log(formData);
 
         try {
-            await createProduct(formData); // Ensure createProduct handles FormData correctly
+            await createProduct(formData);
         } catch (error) {
             console.log(error);
         } finally {
