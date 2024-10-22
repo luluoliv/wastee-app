@@ -3,7 +3,7 @@ import { getToken } from "../utils/getToken";
 
 const apiService: AxiosInstance = axios.create({
     baseURL: "https://wastee-api.onrender.com/api/",
-    timeout: 10000,
+    timeout: 100000,
 });
 
 apiService.interceptors.request.use(

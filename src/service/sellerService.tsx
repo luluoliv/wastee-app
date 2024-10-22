@@ -37,16 +37,18 @@ interface UpdateSeller {
 }
 
 export const getSellerById = async (
-    sellerId:  string | undefined
+    sellerId: string | undefined
 ): Promise<SellerResponse> => {
     try {
-        const response = await apiService.get<SellerResponse>(`sellers/${sellerId}/`);
+        const response = await apiService.get<SellerResponse>(
+            `sellers/${sellerId}/`
+        );
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(
                 error.response.data.detail ||
-                "Erro ao buscar vendedor. Tente novamente."
+                    "Erro ao buscar vendedor. Tente novamente."
             );
         } else {
             throw new Error("Erro desconhecido. Tente novamente.");
@@ -60,13 +62,13 @@ export const getSellersByUserId = async (
     try {
         const response = await apiService.get<SellerResponse>(
             `sellers/by-user/${userId}`
-        );        
+        );
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(
                 error.response.data.detail ||
-                "Erro ao buscar vendedores por usuário. Tente novamente."
+                    "Erro ao buscar vendedores por usuário. Tente novamente."
             );
         } else {
             throw new Error("Erro desconhecido. Tente novamente.");
@@ -82,7 +84,7 @@ export const getAllSellers = async (): Promise<SellerResponse[]> => {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(
                 error.response.data.detail ||
-                "Erro ao buscar vendedores. Tente novamente."
+                    "Erro ao buscar vendedores. Tente novamente."
             );
         } else {
             throw new Error("Erro desconhecido. Tente novamente.");
@@ -90,19 +92,21 @@ export const getAllSellers = async (): Promise<SellerResponse[]> => {
     }
 };
 
-export const createSeller = async (
-    seller: NewSeller
-): Promise<NewSeller> => {
+export const createSeller = async (seller: NewSeller): Promise<NewSeller> => {
     try {
-        const response = await apiService.post<NewSeller>("sellers/", seller, {headers: {
-            "Content-Type": "multipart/form-data"
-        }});
+        const response = await apiService.post<NewSeller>("sellers/", seller, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
         return response.data;
-    } catch (error) {
+    } catch (error: any) {
+        console.error(error.response.data);
+        
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(
-                error.response.data.detail ||
-                "Erro ao criar vendedor. Tente novamente."
+                error.response.data.cpf  ||
+                    "Erro ao criar vendedor. Tente novamente."
             );
         } else {
             throw new Error("Erro desconhecido. Tente novamente.");
@@ -123,7 +127,7 @@ export const updateSeller = async (
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(
                 error.response.data.detail ||
-                "Erro ao atualizar vendedor. Tente novamente."
+                    "Erro ao atualizar vendedor. Tente novamente."
             );
         } else {
             throw new Error("Erro desconhecido. Tente novamente.");
@@ -138,7 +142,7 @@ export const deleteSeller = async (sellerId: number): Promise<void> => {
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(
                 error.response.data.detail ||
-                "Erro ao deletar vendedor. Tente novamente."
+                    "Erro ao deletar vendedor. Tente novamente."
             );
         } else {
             throw new Error("Erro desconhecido. Tente novamente.");

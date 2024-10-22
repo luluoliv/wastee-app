@@ -38,7 +38,7 @@ interface SetPasswordCredentials {
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
     try {
         await AsyncStorage.removeItem("access");
-        await AsyncStorage.removeItem("refresh");
+        await AsyncStorage.removeItem("refresh");        
         const response = await apiService.post<AuthResponse>(
             "login/",
             credentials
@@ -54,6 +54,8 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
 
         return { access, refresh, user };
     } catch (error) {
+        console.log(error);
+        
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(
                 error.response.data.detail ||

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
 import React, { useState } from "react";
 import tw from "@/src/lib/tailwind";
 import Header from "@/src/components/header";
@@ -42,45 +42,41 @@ const Location = () => {
     const onSubmit = async (form: NewSeller) => {
         const parsedRG = JSON.parse(selectedRG);
         const parsedSelfie = JSON.parse(selectedSelfie);
-    
+
         const data = new FormData();
-    
-        // Append all form fields, ensuring all required fields are included
-        data.append('postal_code', form.postal_code.replace(/\D/g, ""));  // Clean postal code
-        data.append('cpf', cpf);  // Append CPF from params
-        data.append('birth_date', transformDateToISO(birthDate));  // Convert birth date to ISO format
-        data.append('state', form.state);  // Append state
-        data.append('city', form.city);  // Append city
-        data.append('neighborhood', form.neighborhood);  // Append neighborhood
-        data.append('user', '10');  // User ID (example)
-        data.append('user_id', '10');  // Append user_id explicitly
-    
+
+        data.append("postal_code", form.postal_code.replace(/\D/g, "")); // Clean postal code
+        data.append("cpf", cpf); // Append CPF from params
+        data.append("birth_date", transformDateToISO(birthDate)); // Convert birth date to ISO format
+        data.append("state", form.state); // Append state
+        data.append("city", form.city); // Append city
+        data.append("neighborhood", form.neighborhood); // Append neighborhood
+        data.append("user", "10"); // User ID (example)
+
         // Append RG and Selfie as files
-        data.append('rg', {
+        data.append("rg", {
             uri: parsedRG.uri,
             name: parsedRG.name,
             type: parsedRG.type,
         });
-    
-        data.append('selfie_document', {
+
+        data.append("selfie_document", {
             uri: parsedSelfie.uri,
             name: parsedSelfie.name,
             type: parsedSelfie.type,
         });
 
         console.log(data);
-        
-    
+
         setIsLoading(true);
         try {
-            await createSeller(data);  // Submit form data
-        } catch (error) {
-            console.log(error);
+            await createSeller(data);
+        } catch (error: any) {
+            Alert.alert(error.message);
         } finally {
             setIsLoading(false);
         }
     };
-    
 
     return (
         <View style={tw`w-full flex-1 pt-10 bg-grayscale-20`}>
