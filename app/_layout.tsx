@@ -54,6 +54,7 @@ export default function RootLayout() {
                             <Stack.Screen name="tutorial" />
                             <Stack.Screen name="(tabs)" />
                             <Stack.Screen name="search" />
+                            <Stack.Screen name="chat/[id]" />
                             <Stack.Screen name="category/[id]" />
                             <Stack.Screen name="product/[id]" />
                             <Stack.Screen name="products-seller/[id]" />

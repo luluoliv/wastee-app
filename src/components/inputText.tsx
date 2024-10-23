@@ -15,8 +15,8 @@ export interface InputTextProps {
 const InputText: React.FC<InputTextProps> = ({
     leftSideContent,
     placeholder,
-    value,
-    onChangeText,
+    value = "",
+    onChangeText = (text: string) => {},
     onFocusNavigate,
 }) => {
     const [focused, setFocused] = useState(false);
@@ -51,7 +51,7 @@ const InputText: React.FC<InputTextProps> = ({
 
                 <TextInput
                     value={value}
-                    onChangeText={onChangeText} // Use onChangeText prop
+                    onChangeText={onChangeText}
                     onFocus={() => setFocused(true)}
                     onBlur={() => setFocused(false)}
                     placeholderTextColor={tw.color("text-grayscale-60")}
@@ -60,10 +60,10 @@ const InputText: React.FC<InputTextProps> = ({
                 />
             </View>
 
-            {value?.length > 0 && (
+            {value && value.length > 0 && (
                 <TouchableOpacity
                     style={tw`absolute right-4 bg-grayscale-40`}
-                    onPress={() => onChangeText("")}
+                    onPress={() => onChangeText?.("")} 
                 >
                     <Feather
                         name="x-circle"
@@ -75,6 +75,5 @@ const InputText: React.FC<InputTextProps> = ({
         </View>
     );
 };
-
 
 export default InputText;
