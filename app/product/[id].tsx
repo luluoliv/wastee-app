@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity, ActivityIndicator
+} from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 
 import tw from "@/src/lib/tailwind";
-
-import { items } from "@/src/data/items";
-import { sellers } from "@/src/data/sellers";
-import { categories } from "@/src/data/categories";
 
 import LikeButton from "@/src/components/like";
 import Classification from "@/src/components/classification";
@@ -22,260 +24,342 @@ import Footer from "@/src/components/footer";
 import ModalReport from "@/src/components/modalReport";
 
 import { ProductResponse, getProductById } from "@/src/service/productsService";
+import { CommentResponse, getComments } from "@/src/service/commentsService";
+import { useUser } from "@/src/contexts/UserContext";
+
+import { favoriteItem } from "@/src/utils/favoriteItem";
+import { formatCurrency } from "@/src/utils/formatCurrency";
 
 const Product = () => {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const [product, setProduct] = useState<ProductResponse>({});
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+    const { id } = useLocalSearchParams<{ id: string }>();
 
-  useEffect(() => {
+    const { user } = useUser();
+
+    const [product, setProduct] = useState<ProductResponse | null>(null);
+    const [comments, setComments] = useState<CommentResponse[]>([]);
+
+    const [loadingProduct, setLoadingProduct] = useState<boolean>(false);
+    const [loadingComments, setLoadingComments] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+
     const fetchProduct = async () => {
-      try {
-        const response = await getProductById(id);
-        setProduct(response);
-        console.log(response);
-      } catch (err: any) {
-        setError(err.message || "Erro ao carregar produto.");
-      } finally {
-        setLoading(false);
-      }
+        setLoadingProduct(true);
+        try {
+            const response = await getProductById(id);
+            setProduct(response);
+            console.log(response);
+        } catch (err: any) {
+            setError(err.message || "Erro ao carregar produto.");
+        } finally {
+            setLoadingProduct(false);
+        }
     };
 
-    fetchProduct();
-  }, []);
+    useEffect(() => {
+        fetchProduct();
+    }, []);
 
-  const item = items.find((item) => item.id === id);
+    useEffect(() => {
+        const fetchComments = async () => {
+            setLoadingComments(true);
+            try {
+                const response = await getComments(id);
+                setComments(response);
+                console.log(response);
+            } catch (err: any) {
+                setError(err.message || "Erro ao carregar comentários.");
+            } finally {
+                setLoadingComments(false);
+            }
+        };
 
-  const maxLengthDescription = 150;
+        fetchComments();
+    }, []);
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [isReport, setIsReport] = useState(false);
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+    const maxLengthDescription = 150;
 
-  const options = [
-    {
-      label: "Visitar vendedor",
-      icon: "shopping-bag",
-      action: () => router.push(`/seller/${item?.seller}`),
-    },
-    {
-      label: "Compartilhar",
-      icon: "share-2",
-      action: () => console.log("Produto compartilhado."),
-    },
-    {
-      label: "Denunciar",
-      icon: "alert-circle",
-      action: () => setIsReport(!isReport),
-    },
-  ];
+    const [isOpen, setIsOpen] = useState(false);
+    const [isReport, setIsReport] = useState(false);
+    const [dropdownVisible, setDropdownVisible] = useState(false);
 
-  if (!item) {
-    return <Text style={tw`text-grayscale-100`}>Item não encontrado.</Text>;
-  }
+    const options = [
+        {
+            label: "Visitar vendedor",
+            icon: "shopping-bag",
+            action: () => router.push(`/seller/${product?.seller_id}`),
+        },
+        {
+            label: "Compartilhar",
+            icon: "share-2",
+            action: () => console.log("Produto compartilhado."),
+        },
+        {
+            label: "Denunciar",
+            icon: "alert-circle",
+            action: () => setIsReport(!isReport),
+        },
+    ];
 
-  const truncatedDescription =
-    item.description.length > maxLengthDescription
-      ? item.description.slice(0, maxLengthDescription) + "..."
-      : item.description;
-
-  const seller = sellers.find((seller) => seller.id === item.seller);
-  const category = categories.find((category) => category.id === item.category);
-
-  return (
-    <View style={tw`flex-1 py-10 bg-grayscale-20`}>
-      <Header
-        title={category?.name}
-        moreIconName="more-horizontal"
-        onMorePress={() => setDropdownVisible(!dropdownVisible)}
-      />
-
-      <ModalReport visible={isReport} onClose={() => setIsReport(false)} />
-
-      <Dropdown
-        options={options}
-        visible={dropdownVisible}
-        onClose={() => setDropdownVisible(false)}
-      />
-
-      <ScrollView contentContainerStyle={tw`w-full px-4`}>
-        <ScrollView horizontal pagingEnabled>
-          {product.images?.map((image, index) => (
-            <Image
-              key={index}
-              source={{ uri: image }}
-              style={tw`w-[353px] h-[353px] rounded-xl mr-2`}
-            />
-          ))}
-        </ScrollView>
-
-        <View style={tw`flex-col gap-y-5`}>
-          <View style={tw`flex-col mt-2`}>
+    if (loadingProduct || loadingComments) {
+        return (
             <View
-              style={tw`w-full flex-row justify-between items-center gap-x-2`}
+                style={tw`flex-1 justify-center items-center bg-grayscale-20`}
             >
-              <Text style={tw`text-grayscale-80 text-xl font-medium max-w-xs`}>
-                {product.title}
-              </Text>
-              <LikeButton
-                item={item}
-                size="small"
-                onFavoriteToggle={(id) => console.log(`item ${id} favoritado.`)}
-              />
+                <ActivityIndicator size="large" color="#000" />
+                <Text style={tw`mt-2 text-grayscale-100`}>Carregando...</Text>
             </View>
+        );
+    }
 
-            <View style={tw`flex-row gap-x-1 items-center`}>
-              <Text
-                style={[
-                  tw`font-semibold text-xl`,
-                  !!product.discounted_price
-                    ? tw`text-primary-light`
-                    : tw`text-grayscale-100`,
-                ]}
-              >
-                {product.original_price}
-              </Text>
-              {!!product.discounted_price && (
-                <Text
-                  style={tw`font-semibold text-xl text-grayscale-60 line-through`}
-                >
-                  {product.discounted_price}
-                </Text>
-              )}
-            </View>
+    if (!product) {
+        return <Text style={tw`text-grayscale-100`}>Item não encontrado.</Text>;
+    }
 
-            <Classification maxRating={5} comments={item.comments} size={14} />
+    const truncatedDescription =
+        product.description.length > maxLengthDescription
+            ? product.description.slice(0, maxLengthDescription) + "..."
+            : product.description;
 
-            <Text style={tw`text-grayscale-60 font-medium text-base`}>
-              <Feather name="user" size={16} color="#787f8d" />{" "}
-              {seller ? seller.name : "Nome não disponível"}
-            </Text>
-          </View>
-
-          <Modal
-            title="Descrição"
-            visible={isOpen}
-            onClose={() => setIsOpen(false)}
-          >
-            <Text style={tw`text-grayscale-100 font-normal text-base`}>
-              {product.description}
-            </Text>
-          </Modal>
-
-          <View style={tw`flex-col gap-y-2`}>
-            <Text style={tw`text-grayscale-80 font-medium text-xl`}>
-              Descrição
-            </Text>
-            <View>
-              <Text style={tw`text-grayscale-100 font-normal text-base`}>
-                {product.description?.length > maxLengthDescription
-                  ? truncatedDescription
-                  : product.description}
-              </Text>
-              {product.description?.length > maxLengthDescription && (
-                <TouchableOpacity onPress={() => setIsOpen(!isOpen)}>
-                  <Text
-                    style={tw`text-primary font-medium text-base text-right`}
-                  >
-                    Ler mais
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-
-          <Button
-            icon="message-circle"
-            iconColor="text-grayscale-20"
-            style={tw`bg-grayscale-100`}
-            textStyle={tw`text-grayscale-20 font-semibold text-base`}
-            title="Converse com o vendedor"
-            onPress={() => console.log("Converse com o vendedor")}
-          />
-
-          <View style={tw`flex-col gap-y-2`}>
-            <Text style={tw`text-grayscale-80 font-medium text-xl`}>
-              Localização
-            </Text>
-            <View style={tw`flex-row justify-between`}>
-              <Text style={tw`text-grayscale-60 font-medium text-base`}>
-                Estado
-              </Text>
-              <Text style={tw`text-grayscale-100 font-medium text-base`}>
-                {item.location.state}
-              </Text>
-            </View>
-            <View style={tw`flex-row justify-between`}>
-              <Text style={tw`text-grayscale-60 font-medium text-base`}>
-                Cidade
-              </Text>
-              <Text style={tw`text-grayscale-100 font-medium text-base`}>
-                {item.location.city}
-              </Text>
-            </View>
-            <View style={tw`flex-row justify-between`}>
-              <Text style={tw`text-grayscale-60 font-medium text-base`}>
-                Bairro
-              </Text>
-              <Text style={tw`text-grayscale-100 font-medium text-base`}>
-                {item.location.neighborhood}
-              </Text>
-            </View>
-          </View>
-
-          <Divider />
-
-          <CardSeller item={item} />
-
-          <Divider />
-
-          <View style={tw`flex-col gap-y-3`}>
-            <View style={tw`flex-row justify-between`}>
-              <View style={tw`flex-row gap-x-1`}>
-                <Text style={tw`text-grayscale-80 font-medium text-xl`}>
-                  Opiniões sobre vendedor
-                </Text>
-                <Text style={tw`text-grayscale-60 font-medium text-xl`}>
-                  ({item.comments?.length})
-                </Text>
-              </View>
-
-              <View style={tw`flex-row items-center gap-x-1`}>
-                <FontAwesome name="star" size={16} color="#fbfcff" />
-                <Text style={tw`text-grayscale-80 font-medium text-xl`}>
-                  {item.rate}
-                </Text>
-              </View>
-            </View>
-
-            <ScrollView
-              horizontal
-              pagingEnabled
-              contentContainerStyle={tw`flex-row items-center gap-x-3`}
-            >
-              {item.comments?.map((comment, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => router.push(`/reviews/${seller?.id}`)}
-                  disabled={comment.comment?.length < 100}
-                >
-                  <ReviewCard comment={comment} />
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-            <Button
-              style={tw`bg-grayscale-40`}
-              title="Ver análises"
-              onPress={() => router.push(`/reviews/${id}`)}
+    return (
+        <View style={tw`flex-1 py-10 bg-grayscale-20`}>
+            <Header
+                title={product?.category_name}
+                moreIconName="more-horizontal"
+                onMorePress={() => setDropdownVisible(!dropdownVisible)}
             />
-          </View>
 
-          <Footer />
+            <ModalReport
+                visible={isReport}
+                onClose={() => setIsReport(false)}
+            />
+
+            <Dropdown
+                options={options}
+                visible={dropdownVisible}
+                onClose={() => setDropdownVisible(false)}
+            />
+
+            <ScrollView contentContainerStyle={tw`w-full px-4`}>
+                <ScrollView horizontal pagingEnabled>
+                    {product?.images?.map((image, index) => (
+                        <Image
+                            key={index}
+                            source={{ uri: image }}
+                            style={tw`w-[353px] h-[353px] rounded-xl mr-2`}
+                        />
+                    ))}
+                </ScrollView>
+
+                <View style={tw`flex-col gap-y-5`}>
+                    <View style={tw`flex-col mt-2`}>
+                        <View
+                            style={tw`w-full flex-row justify-between items-center gap-x-2`}
+                        >
+                            <Text
+                                style={tw`text-grayscale-80 text-xl font-medium max-w-xs`}
+                            >
+                                {product?.title}
+                            </Text>
+                            <LikeButton
+                                item={product}
+                                size="small"
+                                onFavoriteToggle={() =>
+                                    favoriteItem(product, user, fetchProduct)
+                                }
+                            />
+                        </View>
+
+                        <View style={tw`flex-row gap-x-1 items-center`}>
+                            <Text
+                                style={[
+                                    tw`font-semibold text-xl`,
+                                    !!product?.discounted_price
+                                        ? tw`text-primary-light`
+                                        : tw`text-grayscale-100`,
+                                ]}
+                            >
+                                {formatCurrency(product?.original_price)}
+                            </Text>
+                            {!!product?.discounted_price && (
+                                <Text
+                                    style={tw`font-semibold text-xl text-grayscale-60 line-through`}
+                                >
+                                    {formatCurrency(product?.discounted_price)}
+                                </Text>
+                            )}
+                        </View>
+
+                        <Classification
+                            maxRating={5}
+                            comments={comments}
+                            size={14}
+                        />
+
+                        <Text
+                            style={tw`text-grayscale-60 font-medium text-base`}
+                        >
+                            <Feather name="user" size={16} color="#787f8d" />{" "}
+                            {product.seller_id
+                                ? product.seller_name
+                                : "Nome não disponível"}
+                        </Text>
+                    </View>
+
+                    <Modal
+                        title="Descrição"
+                        visible={isOpen}
+                        onClose={() => setIsOpen(false)}
+                    >
+                        <Text
+                            style={tw`text-grayscale-100 font-normal text-base`}
+                        >
+                            {product?.description}
+                        </Text>
+                    </Modal>
+
+                    <View style={tw`flex-col gap-y-2`}>
+                        <Text style={tw`text-grayscale-80 font-medium text-xl`}>
+                            Descrição
+                        </Text>
+                        <View>
+                            <Text
+                                style={tw`text-grayscale-100 font-normal text-base`}
+                            >
+                                {product?.description?.length >
+                                maxLengthDescription
+                                    ? truncatedDescription
+                                    : product?.description}
+                            </Text>
+                            {product?.description?.length >
+                                maxLengthDescription && (
+                                <TouchableOpacity
+                                    onPress={() => setIsOpen(!isOpen)}
+                                >
+                                    <Text
+                                        style={tw`text-primary font-medium text-base text-right`}
+                                    >
+                                        Ler mais
+                                    </Text>
+                                </TouchableOpacity>
+                            )}
+                        </View>
+                    </View>
+
+                    <Button
+                        icon="message-circle"
+                        iconColor="text-grayscale-20"
+                        style={tw`bg-grayscale-100`}
+                        textStyle={tw`text-grayscale-20 font-semibold text-base`}
+                        title="Converse com o vendedor"
+                        onPress={() => router.push(`/chat/${user?.id}`)}
+                    />
+
+                    <View style={tw`flex-col gap-y-2`}>
+                        <Text style={tw`text-grayscale-80 font-medium text-xl`}>
+                            Localização
+                        </Text>
+                        <View style={tw`flex-row justify-between`}>
+                            <Text
+                                style={tw`text-grayscale-60 font-medium text-base`}
+                            >
+                                Estado
+                            </Text>
+                            <Text
+                                style={tw`text-grayscale-100 font-medium text-base`}
+                            >
+                                {product.state  || "Estado não disponível"}
+                            </Text>
+                        </View>
+                        <View style={tw`flex-row justify-between`}>
+                            <Text
+                                style={tw`text-grayscale-60 font-medium text-base`}
+                            >
+                                Cidade
+                            </Text>
+                            <Text
+                                style={tw`text-grayscale-100 font-medium text-base`}
+                            >
+                                {product.city  || "Cidade não disponível"}
+                            </Text>
+                        </View>
+                        <View style={tw`flex-row justify-between`}>
+                            <Text
+                                style={tw`text-grayscale-60 font-medium text-base`}
+                            >
+                                Bairro
+                            </Text>
+                            <Text
+                                style={tw`text-grayscale-100 font-medium text-base`}
+                            >
+                                {product.neighbourhood  || "Bairro não disponível"}
+                            </Text>
+                        </View>
+                    </View>
+
+                    <Divider />
+
+                    <CardSeller item={product} />
+
+                    <Divider />
+
+                    <View style={tw`flex-col gap-y-3`}>
+                        <View style={tw`flex-row justify-between`}>
+                            <View style={tw`flex-row gap-x-1`}>
+                                <Text
+                                    style={tw`text-grayscale-80 font-medium text-xl`}
+                                >
+                                    Opiniões sobre vendedor
+                                </Text>
+                                <Text
+                                    style={tw`text-grayscale-60 font-medium text-xl`}
+                                >
+                                    ({comments?.length})
+                                </Text>
+                            </View>
+
+                            <View style={tw`flex-row items-center gap-x-1`}>
+                                <FontAwesome
+                                    name="star"
+                                    size={16}
+                                    color="#fbfcff"
+                                />
+                                <Text
+                                    style={tw`text-grayscale-80 font-medium text-xl`}
+                                >
+                                    {product.rate}
+                                </Text>
+                            </View>
+                        </View>
+
+                        <ScrollView
+                            horizontal
+                            pagingEnabled
+                            contentContainerStyle={tw`flex-row items-center gap-x-3`}
+                        >
+                            {comments?.map((comment, index) => (
+                                <TouchableOpacity
+                                    key={index}
+                                    onPress={() =>
+                                        router.push(`/reviews/${comment.user}`)
+                                    }
+                                    disabled={comment.comment?.length < 100}
+                                >
+                                    <ReviewCard comment={comment} />
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
+                        <Button
+                            style={tw`bg-grayscale-40`}
+                            title="Ver análises"
+                            onPress={() => router.push(`/reviews/${id}`)}
+                        />
+                    </View>
+
+                    <Footer />
+                </View>
+            </ScrollView>
         </View>
-      </ScrollView>
-    </View>
-  );
+    );
 };
 
 export default Product;

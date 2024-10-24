@@ -4,10 +4,11 @@ import axios from "axios";
 export interface ProductResponse {
     id: string;
     title: string;
+    category_name: string;
     original_price?: string;
     discounted_price?: string;
     description: string;
-    favorited: boolean | undefined;
+    favorited: boolean;
     rate: string;
     seller_name?: string;
     seller_id?: string;
@@ -33,11 +34,11 @@ interface UpdateProduct {
 }
 
 export const getProductById = async (
-    productId: string
-): Promise<ProductResponse[]> => {
+    productId: string | null
+): Promise<ProductResponse> => {
     try {
-        const response = await apiService.get<ProductResponse[]>(
-            `products/${productId}/`
+        const response = await apiService.get<ProductResponse>(
+            `product-detail/${productId}/`
         );
         return response.data;
     } catch (error) {

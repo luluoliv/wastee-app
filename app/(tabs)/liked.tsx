@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
+import { Feather } from "@expo/vector-icons";
 
 import tw from "@/src/lib/tailwind";
+
 import InputText from "@/src/components/inputText";
-import { Feather } from "@expo/vector-icons";
 import Item from "@/src/components/item";
-import { items } from "@/src/data/items";
+
+import { FavoriteResponse, getFavorites } from "@/src/service/favoriteService";
+
 import { sadRobot } from "@/src/utils/imports";
 
 export default function Liked() {
@@ -16,7 +19,26 @@ export default function Liked() {
         router.push(`/product/${id}`);
     };
 
-    const favorites = items.filter((item) => item.favorited === true);
+    const [loading, setLoading]= useState<boolean>(false);
+    const [error, setError]= useState<string | null>(null);
+    const [favorites, setFavorites]= useState<FavoriteResponse[]>([]);
+
+    const fetchFavorites = async () => {
+        setLoading(true);
+        try {
+            const response = await getFavorites();
+            setFavorites(response);
+            console.log(response);
+        } catch (err: any) {
+            setError(err.message || "Erro ao carregar comentários.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchFavorites();
+    }, []);
 
     return (
         <View style={tw`w-full flex-1 pt-10 px-3 gap-y-4 bg-grayscale-20`}>
@@ -42,7 +64,7 @@ export default function Liked() {
                         <TouchableOpacity
                             onPress={() => handleItemPress(item.id)}
                         >
-                            <Item data={item} likable />
+                            <Item fetchProduct={fetchFavorites} data={item} likable />
                         </TouchableOpacity>
                     )}
                     keyExtractor={(item) => item.id}

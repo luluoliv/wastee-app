@@ -8,14 +8,21 @@ import Dropdown from "./dropdown";
 import ModalReport from "./modalReport";
 import LikeButton from "./like";
 import { ProductResponse } from "../service/productsService";
+import { favoriteItem } from "../utils/favoriteItem";
+import { formatCurrency } from "../utils/formatCurrency";
+import { useUser } from "../contexts/UserContext";
 
 interface ItemProps {
     data: ProductResponse;
     likable?: boolean;
+    fetchProduct: ()=> Promise<void>
 }
 
-const Item: React.FC<ItemProps> = ({ data, likable }) => {
+const Item: React.FC<ItemProps> = ({ data, likable, fetchProduct }) => {
     const router = useRouter();
+    const { user } = useUser();
+
+
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [isReport, setIsReport] = useState(false);
 
@@ -25,7 +32,7 @@ const Item: React.FC<ItemProps> = ({ data, likable }) => {
         {
             label: data?.favorited ? "Descurtir" : "Curtir",
             icon: "heart",
-            action: () => console.log("Produto curtido."),
+            action: () => favoriteItem(data, user, fetchProduct),
         },
         {
             label: "Visitar vendedor",
@@ -99,8 +106,8 @@ const Item: React.FC<ItemProps> = ({ data, likable }) => {
                         <LikeButton
                             item={data}
                             size="small"
-                            onFavoriteToggle={(id) =>
-                                console.log(`Item ${id} favoritado.`)
+                            onFavoriteToggle={() =>
+                                favoriteItem(data, user, fetchProduct)
                             }
                         />
                     ) : (
@@ -125,13 +132,14 @@ const Item: React.FC<ItemProps> = ({ data, likable }) => {
                                 : tw`text-grayscale-100`,
                         ]}
                     >
-                        {data.original_price || "Preço não disponível"}
+                        {formatCurrency(data.original_price) ||
+                            "Preço não disponível"}
                     </Text>
                     {hasDiscount && (
                         <Text
                             style={tw`text-sm font-semibold text-grayscale-60 line-through`}
                         >
-                            {data.discounted_price}
+                            {formatCurrency(data.discounted_price)}
                         </Text>
                     )}
                 </View>

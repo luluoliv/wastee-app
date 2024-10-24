@@ -21,19 +21,19 @@ export default function Home() {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await getAllProducts();
-                setProducts(response);
-                console.log(response);
-            } catch (err: any) {
-                setError(err.message || "Erro ao carregar produtos.");
-            } finally {
-                setLoading(false);
-            }
-        };
+    const fetchProducts = async () => {
+        try {
+            const response = await getAllProducts();
+            setProducts(response);
+            console.log(response);
+        } catch (err: any) {
+            setError(err.message || "Erro ao carregar produtos.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         fetchProducts();
     }, []);
 
@@ -76,7 +76,7 @@ export default function Home() {
                 data={products}
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => handleItemPress(item.id)}>
-                        <Item data={item || {}} />
+                        <Item fetchProduct={fetchProducts} data={item || {}} />
                     </TouchableOpacity>
                 )}
                 keyExtractor={(item) => item.id}

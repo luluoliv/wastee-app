@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { Comment } from "@/src/data/items";
 import tw from "../lib/tailwind";
+import { CommentResponse } from "../service/commentsService";
 
 interface ClassificationProps {
-    comments: Comment[] | undefined;
+    comments: CommentResponse[] | undefined;
     maxRating?: number;
     size?: number;
 }
@@ -15,7 +15,7 @@ const Classification: React.FC<ClassificationProps> = ({
     maxRating = 5,
     size = 20,
 }) => {
-    function calculateAverageRating(comments: Comment[] = []): number {
+    function calculateAverageRating(comments: CommentResponse[] = []): number {
         if (comments.length === 0) return 0;
 
         const totalRating = comments.reduce(
