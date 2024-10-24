@@ -39,6 +39,12 @@
         "projectId": "2874143d-2f03-4f34-ab39-b3967eed3cc3"
       }
     },
-    "owner": "lu0liv"
+    "owner": "lu0liv",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/2874143d-2f03-4f34-ab39-b3967eed3cc3"
+    }
   }
 }
