@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, ActivityIndicator, Image } from "react-native";
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    ActivityIndicator,
+    Image,
+} from "react-native";
 import React, { useState } from "react";
 import Avatar from "./avatar";
 import tw from "../lib/tailwind";
@@ -7,6 +13,7 @@ import { ChatResponse } from "../service/chatsService";
 import Dropdown from "./dropdown";
 import ModalReport from "./modalReport";
 import { useRouter } from "expo-router";
+import { useUser } from "../contexts/UserContext";
 
 interface ChatPreviewProps {
     data: ChatResponse;
@@ -17,6 +24,7 @@ const ChatPreview: React.FC<ChatPreviewProps> = ({
     data,
     handleDeleteChat,
 }) => {
+    const { user } = useUser();
     const router = useRouter();
     const [isReport, setIsReport] = useState(false);
     const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -42,10 +50,10 @@ const ChatPreview: React.FC<ChatPreviewProps> = ({
     return (
         <>
             {dropdownVisible && (
-                <TouchableOpacity 
-                    style={tw`absolute inset-0 bg-transparent`} 
-                    onPress={() => setDropdownVisible(false)} 
-                    activeOpacity={1} 
+                <TouchableOpacity
+                    style={tw`absolute inset-0 bg-transparent`}
+                    onPress={() => setDropdownVisible(false)}
+                    activeOpacity={1}
                 />
             )}
             <ModalReport
@@ -70,7 +78,25 @@ const ChatPreview: React.FC<ChatPreviewProps> = ({
                             {data.seller_name}
                         </Text>
 
-                        {data.last_message ? (
+                        {data.last_message?.sender_id === user?.id ? (
+                            <>
+                            <Text
+                                style={tw`text-base font-medium text-grayscale-60`}
+                                >
+                                {data.last_message?.message}
+                            </Text>
+                            <Text
+                            style={tw`font-semibold text-sm text-grayscale-60`}
+                            >
+                            {new Date(
+                                data.last_message?.sent_at
+                            ).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                            })}
+                        </Text>
+                            </>
+                        ) : data.last_message ? (
                             <>
                                 <Text
                                     style={tw`text-base font-medium text-grayscale-100`}
@@ -112,4 +138,3 @@ const ChatPreview: React.FC<ChatPreviewProps> = ({
 };
 
 export default ChatPreview;
-

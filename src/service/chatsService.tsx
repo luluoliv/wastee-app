@@ -14,7 +14,9 @@ export interface ChatResponse {
 export interface LastMessageResponse {
     id: string;
     message: string;
-    sent_at: string;
+    sender_name: string;
+    sender_id: string;
+    sent_at: string | number;
 }
 
 export interface MessageResponse {
@@ -31,7 +33,7 @@ interface NewChat {
 }
 
 export interface NewChatResponse {
-    chat_id: string;
+    id: string;
     message: string;
 }
 
@@ -97,7 +99,9 @@ export const getAllChats = async (): Promise<ChatResponse[]> => {
 
 export const createChat = async (chat: NewChat): Promise<NewChatResponse> => {
     try {
-        const response = await apiService.post<NewChatResponse>("chats/", chat);
+        console.log(chat);
+        
+        const response = await apiService.post<NewChatResponse>("chats/", chat);        
         return response.data;
     } catch (error) {        
         if (axios.isAxiosError(error) && error.response) {

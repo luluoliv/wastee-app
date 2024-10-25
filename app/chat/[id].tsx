@@ -1,4 +1,13 @@
-import { View, ActivityIndicator, Text, TouchableOpacity, Alert } from "react-native";
+import {
+    View,
+    ActivityIndicator,
+    Text,
+    TouchableOpacity,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+} from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import React, { useEffect, useState } from "react";
 import tw from "@/src/lib/tailwind";
 import Header from "@/src/components/header";
@@ -22,12 +31,13 @@ const Chat = () => {
     const [error, setError] = useState<string | null>(null);
     const [isReport, setIsReport] = useState(false);
     const [dropdownVisible, setDropdownVisible] = useState(false);
-
+    
     const fetchChat = async () => {
         try {
             const response = await getChatById(id);
-            setChat(response);
             console.log(response);
+            
+            setChat(response);
         } catch (err: any) {
             setError(err.message || "Erro ao carregar a conversa.");
         } finally {
@@ -44,7 +54,7 @@ const Chat = () => {
             await deleteChat(id);
             Alert.alert("Conversa deletada com sucesso!");
             fetchChat();
-        } catch (error: any) {            
+        } catch (error: any) {
             Alert.alert(error.message);
         }
     };
@@ -93,29 +103,46 @@ const Chat = () => {
                         visible={dropdownVisible}
                         onClose={() => setDropdownVisible(false)}
                     />
-
-                    <View style={tw`flex-1 p-5 gap-3`}>
-                        <View style={tw`flex-row gap-x-3 px-3`}>
-                            <Feather name="info" size={24} color={"#787f8d"} />
-                            <Text style={tw`text-base font-medium text-grayscale-60`}>
-                                Use sempre os canais do Wastee e não compartilhe
-                                seus dados pessoais diretamente com ninguém.
-                            </Text>
-                        </View>
-                    </View>
-
-                    <View
-                        style={tw`py-3 px-5 gap-x-3 flex-row justify-center items-center`}
+                    <KeyboardAwareScrollView
+                        contentContainerStyle={tw`flex-grow`}
                     >
-                        <InputChat placeholder="Digite sua mensagem" />
-                        <TouchableOpacity
-                            style={tw`bg-grayscale-100 rounded-full p-3`}
-                            onPress={() => {
-                            }}
+                        <View style={tw`flex-1 p-5 gap-3`}>
+                            <View style={tw`flex-row gap-x-3 px-3`}>
+                                <Feather
+                                    name="info"
+                                    size={24}
+                                    color={"#787f8d"}
+                                />
+                                <Text
+                                    style={tw`text-base font-medium text-grayscale-60`}
+                                >
+                                    Use sempre os canais do Wastee e não
+                                    compartilhe seus dados pessoais diretamente
+                                    com ninguém.
+                                </Text>
+                            </View>
+                        </View>
+                    </KeyboardAwareScrollView>
+
+                    <KeyboardAvoidingView
+                        behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    >
+                        <View
+                            style={tw`py-3 px-5 gap-x-3 flex-row justify-center items-center`}
                         >
-                            <Feather name="send" size={20} color={"#0c0c11"} />
-                        </TouchableOpacity>
-                    </View>
+                            <InputChat placeholder="Digite sua mensagem" />
+                            <TouchableOpacity
+                                style={tw`bg-grayscale-100 rounded-full p-3`}
+                                onPress={() => {}}
+                            >
+                                <Feather
+                                    name="send"
+                                    size={20}
+                                    color={"#0c0c11"}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </KeyboardAvoidingView>
                 </>
             )}
         </View>

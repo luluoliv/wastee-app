@@ -51,8 +51,6 @@ const Product = () => {
         setLoadingProduct(true);
         try {
             const response = await getProductById(id);
-            console.log(response);
-            
             setProduct(response);
         } catch (err: any) {
             setError(err.message || "Erro ao carregar produto.");
@@ -84,23 +82,19 @@ const Product = () => {
     const talkToTheSeller = async () => {
         setLoadingChat(true);
         try {
-            const response = await createChat({
-                seller: product?.seller_id,
-                buyer: user?.id,
-            });
-
-            if (response?.chat_id && !product?.chat_id) {
-                router.push(`/chat/${response.chat_id}`);
-                Alert.alert("Sucesso", response.message);
-            } else if (product?.chat_id) {
+            if (product?.chat_id) {
                 router.push(`/chat/${product?.chat_id}`);
+            } else {
+                const response = await createChat({
+                    seller: product?.seller_id,
+                    buyer: user?.id,
+                });
+                                
+                router.push(`/chat/${response.id}`);
+                Alert.alert("Sucesso", response.message);
             }
         } catch (err: any) {
-            console.error(err);
-            Alert.alert(
-                "Erro",
-                "Não foi possível iniciar a conversa com o vendedor. Por favor, tente novamente."
-            );
+            Alert.alert("Erro", err.message);
         } finally {
             setLoadingChat(false);
         }
