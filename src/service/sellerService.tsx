@@ -1,5 +1,8 @@
 import apiService from "./apiService";
 import axios from "axios";
+import { ProductResponse } from "./productsService";
+import { UserResponse } from "../types/UserResponse";
+import { CommentResponse } from "./commentsService";
 
 export interface SellerResponse {
     id: string;
@@ -12,7 +15,9 @@ export interface SellerResponse {
     city: string;
     neighborhood: string;
     created_at: string;
-    user: number;
+    user: UserResponse;
+    products: ProductResponse[];
+    comments: CommentResponse[];
 }
 
 export interface NewSeller {
@@ -37,7 +42,7 @@ interface UpdateSeller {
 }
 
 export const getSellerById = async (
-    sellerId: string | undefined
+    sellerId: string | null
 ): Promise<SellerResponse> => {
     try {
         const response = await apiService.get<SellerResponse>(

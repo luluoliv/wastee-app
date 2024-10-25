@@ -80,21 +80,23 @@ const ChatPreview: React.FC<ChatPreviewProps> = ({
 
                         {data.last_message?.sender_id === user?.id ? (
                             <>
-                            <Text
-                                style={tw`text-base font-medium text-grayscale-60`}
+                                <Text
+                                    style={tw`text-base font-medium text-grayscale-60`}
                                 >
-                                {data.last_message?.message}
-                            </Text>
-                            <Text
-                            style={tw`font-semibold text-sm text-grayscale-60`}
-                            >
-                            {new Date(
-                                data.last_message?.sent_at
-                            ).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                            })}
-                        </Text>
+                                    {data.last_message?.message}
+                                </Text>
+                                <Text
+                                    style={tw`font-semibold text-sm text-grayscale-60`}
+                                >
+                                    {data.last_message?.sent_at
+                                        ? new Date(
+                                              data.last_message.sent_at
+                                          ).toLocaleTimeString([], {
+                                              hour: "2-digit",
+                                              minute: "2-digit",
+                                          })
+                                        : "Sem mensagens"}
+                                </Text>
                             </>
                         ) : data.last_message ? (
                             <>

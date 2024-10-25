@@ -51,6 +51,8 @@ const Product = () => {
         setLoadingProduct(true);
         try {
             const response = await getProductById(id);
+            console.log(response);
+            
             setProduct(response);
         } catch (err: any) {
             setError(err.message || "Erro ao carregar produto.");

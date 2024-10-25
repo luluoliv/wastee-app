@@ -1,27 +1,71 @@
-import React, { useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
 import tw from "@/src/lib/tailwind";
+
 import Header from "@/src/components/header";
 import Dropdown from "@/src/components/dropdown";
 import Classification from "@/src/components/classification";
 import Button from "@/src/components/button";
 import Footer from "@/src/components/footer";
 import Item from "@/src/components/item";
-import { sellers } from "@/src/data/sellers";
-import { items } from "@/src/data/items";
 import ModalReport from "@/src/components/modalReport";
+
+import { getSellerById, SellerResponse } from "@/src/service/sellerService";
+import Avatar from "@/src/components/avatar";
 
 const Seller = () => {
     const { id } = useLocalSearchParams<{ id: string }>();
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [isReport, setIsReport] = useState(false);
 
+    const [seller, setSeller] = useState<SellerResponse | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [loadingChat, setLoadingChat] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+
     const router = useRouter();
 
-    const seller = sellers.find((seller) => seller?.id === id);
-    const products = items.filter((item) => item?.seller === id);
+    const fetchSeller = async () => {
+        setLoading(true);
+        try {
+            const response = await getSellerById(id);
+            setSeller(response);
+            console.log(response);
+            
+        } catch (error: any) {
+            setError(error.message || "Erro ao carregar produto.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchSeller();
+    }, []);
+
+    const talkToTheSeller = async () => {
+        setLoadingChat(true);
+        try {
+            if (seller?.product?.chat_id) {
+                router.push(`/chat/${product?.chat_id}`);
+            } else {
+                const response = await createChat({
+                    seller: product?.seller_id,
+                    buyer: user?.id,
+                });
+                                
+                router.push(`/chat/${response.id}`);
+                Alert.alert("Sucesso", response.message);
+            }
+        } catch (err: any) {
+            Alert.alert("Erro", err.message);
+        } finally {
+            setLoadingChat(false);
+        }
+    };
+
 
     const options = [
         {
@@ -57,15 +101,12 @@ const Seller = () => {
 
             <View style={tw`flex-col gap-y-5 px-5`}>
                 <View style={tw`flex-row items-center gap-x-3`}>
-                    <Image
-                        source={{ uri: seller?.photo }}
-                        style={tw`w-14 h-14 rounded-full`}
-                    />
+                    <Avatar user={seller?.user?.name} />
                     <View>
                         <Text
                             style={tw`text-grayscale-100 font-semibold text-xl`}
                         >
-                            {seller?.name}
+                            {seller?.user?.name}
                         </Text>
                         <Classification size={14} comments={seller?.comments} />
                     </View>
@@ -85,7 +126,7 @@ const Seller = () => {
                         Produtos
                     </Text>
                     <Text style={tw`font-medium text-grayscale-60 text-xl`}>
-                        ({products.length})
+                        ({seller?.products?.length})
                     </Text>
                 </View>
 
@@ -95,15 +136,19 @@ const Seller = () => {
                         pagingEnabled
                         contentContainerStyle={tw`flex-row items-center gap-x-3`}
                     >
-                        {products.length > 0 ? (
-                            products.map((product, index) => (
+                        {seller?.products?.length || 0 ? (
+                            seller?.products.map((product, index) => (
                                 <TouchableOpacity
                                     key={index}
                                     onPress={() =>
                                         router.push(`/product/${product.id}`)
                                     }
                                 >
-                                    <Item likable data={product} />
+                                    <Item
+                                        likable
+                                        fetchProduct={fetchSeller}
+                                        data={product}
+                                    />
                                 </TouchableOpacity>
                             ))
                         ) : (
@@ -114,7 +159,8 @@ const Seller = () => {
                             </Text>
                         )}
                     </ScrollView>
-                    {products.length > 0 && (
+
+                    {(seller?.products?.length || 0) > 0 && (
                         <Button
                             title="Ver produtos"
                             style={tw`bg-grayscale-40`}
@@ -138,7 +184,7 @@ const Seller = () => {
                         <Text
                             style={tw`text-grayscale-100 font-medium text-base`}
                         >
-                            {seller?.location.state}
+                            {seller?.state}
                         </Text>
                     </View>
                     <View style={tw`flex-row justify-between`}>
@@ -150,7 +196,7 @@ const Seller = () => {
                         <Text
                             style={tw`text-grayscale-100 font-medium text-base`}
                         >
-                            {seller?.location.city}
+                            {seller?.city}
                         </Text>
                     </View>
                     <View style={tw`flex-row justify-between`}>
@@ -162,7 +208,7 @@ const Seller = () => {
                         <Text
                             style={tw`text-grayscale-100 font-medium text-base`}
                         >
-                            {seller?.location.neighborhood}
+                            {seller?.neighborhood}
                         </Text>
                     </View>
                 </View>

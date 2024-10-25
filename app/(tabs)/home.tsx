@@ -25,7 +25,6 @@ export default function Home() {
         try {
             const response = await getAllProducts();
             setProducts(response);
-            console.log(response);
         } catch (err: any) {
             setError(err.message || "Erro ao carregar produtos.");
         } finally {
