@@ -9,6 +9,7 @@ import {
     ScrollView,
     ActivityIndicator, // Import ActivityIndicator for loading spinner
     TouchableOpacity,
+    Alert,
 } from "react-native";
 import { Href, useRouter } from "expo-router";
 import {
@@ -48,8 +49,7 @@ export default function Messages() {
     const handleDeleteChat = async (id: string) => {
         try {
             await deleteChat(id);
-            console.log("Conversa deletada com sucesso!");
-            alert("Conversa deletada com sucesso!");
+            Alert.alert("Conversa deletada com sucesso!");
             fetchChats();
         } catch (error) {
             alert(error);

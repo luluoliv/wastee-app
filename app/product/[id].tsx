@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity, ActivityIndicator
+    View,
+    Text,
+    Image,
+    ScrollView,
+    TouchableOpacity,
+    ActivityIndicator,
+    Alert,
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Feather, FontAwesome } from "@expo/vector-icons";
@@ -25,8 +27,9 @@ import ModalReport from "@/src/components/modalReport";
 
 import { ProductResponse, getProductById } from "@/src/service/productsService";
 import { CommentResponse, getComments } from "@/src/service/commentsService";
-import { useUser } from "@/src/contexts/UserContext";
+import { createChat } from "@/src/service/chatsService";
 
+import { useUser } from "@/src/contexts/UserContext";
 import { favoriteItem } from "@/src/utils/favoriteItem";
 import { formatCurrency } from "@/src/utils/formatCurrency";
 
@@ -40,14 +43,17 @@ const Product = () => {
 
     const [loadingProduct, setLoadingProduct] = useState<boolean>(false);
     const [loadingComments, setLoadingComments] = useState<boolean>(false);
+    const [loadingChat, setLoadingChat] = useState<boolean>(false);
+
     const [error, setError] = useState<string | null>(null);
 
     const fetchProduct = async () => {
         setLoadingProduct(true);
         try {
             const response = await getProductById(id);
-            setProduct(response);
             console.log(response);
+            
+            setProduct(response);
         } catch (err: any) {
             setError(err.message || "Erro ao carregar produto.");
         } finally {
@@ -65,9 +71,8 @@ const Product = () => {
             try {
                 const response = await getComments(id);
                 setComments(response);
-                console.log(response);
             } catch (err: any) {
-                setError(err.message || "Erro ao carregar comentários.");
+                setError(err.message);
             } finally {
                 setLoadingComments(false);
             }
@@ -75,6 +80,31 @@ const Product = () => {
 
         fetchComments();
     }, []);
+
+    const talkToTheSeller = async () => {
+        setLoadingChat(true);
+        try {
+            const response = await createChat({
+                seller: product?.seller_id,
+                buyer: user?.id,
+            });
+
+            if (response?.chat_id && !product?.chat_id) {
+                router.push(`/chat/${response.chat_id}`);
+                Alert.alert("Sucesso", response.message);
+            } else if (product?.chat_id) {
+                router.push(`/chat/${product?.chat_id}`);
+            }
+        } catch (err: any) {
+            console.error(err);
+            Alert.alert(
+                "Erro",
+                "Não foi possível iniciar a conversa com o vendedor. Por favor, tente novamente."
+            );
+        } finally {
+            setLoadingChat(false);
+        }
+    };
 
     const maxLengthDescription = 150;
 
@@ -246,12 +276,13 @@ const Product = () => {
                     </View>
 
                     <Button
+                        loading={loadingChat}
                         icon="message-circle"
                         iconColor="text-grayscale-20"
                         style={tw`bg-grayscale-100`}
                         textStyle={tw`text-grayscale-20 font-semibold text-base`}
                         title="Converse com o vendedor"
-                        onPress={() => router.push(`/chat/${user?.id}`)}
+                        onPress={talkToTheSeller}
                     />
 
                     <View style={tw`flex-col gap-y-2`}>
@@ -267,7 +298,7 @@ const Product = () => {
                             <Text
                                 style={tw`text-grayscale-100 font-medium text-base`}
                             >
-                                {product.state  || "Estado não disponível"}
+                                {product.state || "Estado não disponível"}
                             </Text>
                         </View>
                         <View style={tw`flex-row justify-between`}>
@@ -279,7 +310,7 @@ const Product = () => {
                             <Text
                                 style={tw`text-grayscale-100 font-medium text-base`}
                             >
-                                {product.city  || "Cidade não disponível"}
+                                {product.city || "Cidade não disponível"}
                             </Text>
                         </View>
                         <View style={tw`flex-row justify-between`}>
@@ -291,7 +322,8 @@ const Product = () => {
                             <Text
                                 style={tw`text-grayscale-100 font-medium text-base`}
                             >
-                                {product.neighbourhood  || "Bairro não disponível"}
+                                {product.neighbourhood ||
+                                    "Bairro não disponível"}
                             </Text>
                         </View>
                     </View>

@@ -4,6 +4,7 @@ import axios from "axios";
 export interface ProductResponse {
     id: string;
     title: string;
+    chat_id: string;
     category_name: string;
     original_price?: string;
     discounted_price?: string;

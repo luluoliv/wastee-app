@@ -26,9 +26,13 @@ export interface MessageResponse {
 }
 
 interface NewChat {
-    buyer: string;
-    seller: string;
-    product?: string;
+    buyer: string | undefined;
+    seller: string | undefined;
+}
+
+export interface NewChatResponse {
+    chat_id: string;
+    message: string;
 }
 
 interface NewMessage {
@@ -79,7 +83,7 @@ export const getAllChats = async (): Promise<ChatResponse[]> => {
         return response.data;
     } catch (error) {
         console.log(error);
-        
+
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(
                 error.response.data.detail ||
@@ -91,16 +95,14 @@ export const getAllChats = async (): Promise<ChatResponse[]> => {
     }
 };
 
-export const createChat = async (
-    chat: NewChat
-): Promise<ChatResponse> => {
+export const createChat = async (chat: NewChat): Promise<NewChatResponse> => {
     try {
-        const response = await apiService.post<ChatResponse>("chats/", chat);
+        const response = await apiService.post<NewChatResponse>("chats/", chat);
         return response.data;
-    } catch (error) {
+    } catch (error) {        
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(
-                error.response.data.detail ||
+                error.response.data.error ||
                     "Erro ao criar o chat. Tente novamente."
             );
         } else {
@@ -113,7 +115,10 @@ export const createMessage = async (
     message: NewMessage
 ): Promise<MessageResponse> => {
     try {
-        const response = await apiService.post<MessageResponse>("messages/", message);
+        const response = await apiService.post<MessageResponse>(
+            "messages/",
+            message
+        );
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {

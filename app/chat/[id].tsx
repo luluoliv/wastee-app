@@ -1,4 +1,4 @@
-import { View, ActivityIndicator, Text, TouchableOpacity } from "react-native";
+import { View, ActivityIndicator, Text, TouchableOpacity, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import tw from "@/src/lib/tailwind";
 import Header from "@/src/components/header";
@@ -42,11 +42,10 @@ const Chat = () => {
     const handleDeleteChat = async (id: string | undefined) => {
         try {
             await deleteChat(id);
-            console.log("Conversa deletada com sucesso!");
-            alert("Conversa deletada com sucesso!");
+            Alert.alert("Conversa deletada com sucesso!");
             fetchChat();
-        } catch (error) {
-            alert(error);
+        } catch (error: any) {            
+            Alert.alert(error.message);
         }
     };
 
