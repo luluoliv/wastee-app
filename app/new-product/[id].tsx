@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
 
 import { Feather } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -108,7 +107,7 @@ const NewProduct = () => {
             <View
                 style={tw`flex-row items-center justify-end p-4 bg-grayscale-20`}
             >
-                <TouchableOpacity onPress={() => router.navigate(`/perfil`)}>
+                <TouchableOpacity onPress={() => router.push(`/perfil`)}>
                     <Feather name={"x-circle"} size={24} color="white" />
                 </TouchableOpacity>
             </View>

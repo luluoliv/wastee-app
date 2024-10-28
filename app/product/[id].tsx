@@ -89,7 +89,7 @@ const Product = () => {
                     seller: product?.seller_id,
                     buyer: user?.id,
                 });
-                    
+
                 if (response && response.chat.id) {
                     router.push(`/chat/${response.chat.id}`);
                     Alert.alert("Sucesso", response.message);
@@ -103,7 +103,6 @@ const Product = () => {
             setLoadingChat(false);
         }
     };
-    
 
     const maxLengthDescription = 150;
 
@@ -329,7 +328,7 @@ const Product = () => {
 
                     <Divider />
 
-                    <CardSeller item={product} />
+                    <CardSeller sellerId={product?.seller_id} />
 
                     <Divider />
 
@@ -382,7 +381,9 @@ const Product = () => {
                         <Button
                             style={tw`bg-grayscale-40`}
                             title="Ver análises"
-                            onPress={() => router.push(`/reviews/${id}`)}
+                            onPress={() =>
+                                router.push(`/reviews/${product.seller_id}`)
+                            }
                         />
                     </View>
 

@@ -30,16 +30,27 @@ export default function Messages() {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const [filteredChats, setFilteredChats] = useState<ChatResponse[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>("");
+
     const fetchChats = async () => {
         try {
             const response = await getAllChats();
             setChats(response);
+            setFilteredChats(response);
         } catch (err: any) {
             setError(err.message || "Erro ao carregar produtos.");
         } finally {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        const results = chats.filter((chat) =>
+            chat.seller_name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredChats(results);
+    }, [searchQuery, chats]);
 
     useEffect(() => {
         fetchChats();
@@ -63,6 +74,8 @@ export default function Messages() {
         <View style={tw`w-full flex-1 pt-10 px-3 gap-y-4 bg-grayscale-20`}>
             <View style={tw`w-full flex-col gap-y-5`}>
                 <InputText
+                    onChangeText={setSearchQuery}
+                    value={searchQuery}
                     leftSideContent={
                         <Feather
                             name="search"
@@ -80,6 +93,12 @@ export default function Messages() {
                 </Text>
             </View>
 
+            {searchQuery && filteredChats.length === 0 ? (
+                <Text style={tw`text-gray-500`}>
+                    Nenhuma conversa encontrada.
+                </Text>
+            ) : null}
+
             <ScrollView contentContainerStyle={tw`w-full flex-1 gap-y-4`}>
                 {loading ? (
                     <View
@@ -93,8 +112,8 @@ export default function Messages() {
                             Carregando mensagens...
                         </Text>
                     </View>
-                ) : chats.length > 0 ? (
-                    chats.map((item) => (
+                ) : filteredChats.length > 0 ? (
+                    filteredChats.map((item) => (
                         <TouchableOpacity
                             key={item.id}
                             onPress={() => handleItemPress(item.id)}

@@ -24,7 +24,7 @@ const User = () => {
         <View style={tw`flex-1 w-full h-full py-10 bg-grayscale-20`}>
             <Header onMorePress={() => setDropdownVisible(!dropdownVisible)} />
             <Dropdown
-                style={tw`top-4`}
+                style={tw`top-20`}
                 options={options}
                 visible={dropdownVisible}
                 onClose={() => setDropdownVisible(false)}

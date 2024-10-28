@@ -43,7 +43,7 @@ interface UpdateSeller {
 }
 
 export const getSellerById = async (
-    sellerId: string | null
+    sellerId: string | undefined
 ): Promise<SellerResponse> => {
     try {
         const response = await apiService.get<SellerResponse>(

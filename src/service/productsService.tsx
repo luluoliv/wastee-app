@@ -12,7 +12,7 @@ export interface ProductResponse {
     favorited: boolean;
     rate: string;
     seller_name?: string;
-    seller_id?: string;
+    seller_id?: string  | undefined;
     state?: string;
     city?: string;
     neighbourhood?: string;

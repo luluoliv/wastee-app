@@ -13,6 +13,7 @@ import tw from "@/src/lib/tailwind";
 
 interface ButtonProps {
     onPress: (event: GestureResponderEvent) => void;
+    onPressIn?: (event: GestureResponderEvent) => void;
     title: string;
     style?: StyleProp<ViewStyle>;
     textStyle?: StyleProp<TextStyle>;
@@ -20,6 +21,7 @@ interface ButtonProps {
     icon?: keyof typeof Feather.glyphMap;
     iconColor?: string,
     disabled?: boolean;
+    delayPressIn?: number;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -30,13 +32,17 @@ const Button: React.FC<ButtonProps> = ({
     loading,
     icon,
     iconColor,
-    disabled
+    disabled,
+    delayPressIn,
+    onPressIn,
 }) => {
     return (
         <TouchableOpacity
             style={[tw`w-full bg-primary disabled:bg-grayscale-60 px-4 py-3 rounded-xl items-center flex-row justify-center`, style]}
             onPress={onPress}
+            onPressIn={onPressIn}
             disabled={loading || disabled}
+            delayPressIn={delayPressIn}
         > 
             <View style={tw`flex-row items-center`}>
                 {loading && (

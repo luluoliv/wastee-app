@@ -25,6 +25,7 @@ import { createChat } from "@/src/service/chatsService";
 import { useUser } from "@/src/contexts/UserContext";
 import Divider from "@/src/components/divider";
 import ReviewCard from "@/src/components/reviewCard";
+import { CommentResponse } from "@/src/service/commentsService";
 
 const Seller = () => {
     const { user } = useUser();
@@ -45,7 +46,7 @@ const Seller = () => {
             const response = await getSellerById(id);
             setSeller(response);
         } catch (error: any) {
-            setError(error.message || "Erro ao carregar produto.");
+            setError(error.message || "Erro ao carregar vendedor.");
         } finally {
             setLoading(false);
         }
@@ -237,7 +238,7 @@ const Seller = () => {
                     pagingEnabled
                     contentContainerStyle={tw`flex-row items-center gap-x-3`}
                 >
-                    {seller?.comments?.map((comment, index) => (
+                    {seller?.comments?.map((comment: CommentResponse, index: number) => (
                         <TouchableOpacity
                             key={index}
                             onPress={() =>

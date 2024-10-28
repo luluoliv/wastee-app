@@ -11,6 +11,7 @@ import Item from "@/src/components/item";
 import { FavoriteResponse, getFavorites } from "@/src/service/favoriteService";
 
 import { sadRobot } from "@/src/utils/imports";
+import { ProductResponse } from "@/src/service/productsService";
 
 export default function Liked() {
     const router = useRouter();
@@ -19,15 +20,22 @@ export default function Liked() {
         router.push(`/product/${id}`);
     };
 
-    const [loading, setLoading]= useState<boolean>(false);
-    const [error, setError]= useState<string | null>(null);
-    const [favorites, setFavorites]= useState<FavoriteResponse[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [favorites, setFavorites] = useState<ProductResponse[]>([]);
+
+    const [filteredProducts, setFilteredProducts] = useState<ProductResponse[]>(
+        []
+    );
+    const [searchQuery, setSearchQuery] = useState<string>("");
 
     const fetchFavorites = async () => {
         setLoading(true);
         try {
             const response = await getFavorites();
+
             setFavorites(response);
+            setFilteredProducts(response);
         } catch (err: any) {
             setError(err.message || "Erro ao carregar comentários.");
         } finally {
@@ -36,12 +44,21 @@ export default function Liked() {
     };
 
     useEffect(() => {
+        const results = favorites.filter((product) =>
+            product.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredProducts(results);
+    }, [searchQuery, favorites]);
+
+    useEffect(() => {
         fetchFavorites();
     }, []);
 
     return (
         <View style={tw`w-full flex-1 pt-10 px-3 gap-y-4 bg-grayscale-20`}>
             <InputText
+                onChangeText={setSearchQuery}
+                value={searchQuery}
                 placeholder="Pesquisar"
                 leftSideContent={
                     <Feather
@@ -56,14 +73,24 @@ export default function Liked() {
                 Produtos curtidos
             </Text>
 
+            {searchQuery && filteredProducts.length === 0 ? (
+                <Text style={tw`text-gray-500`}>
+                    Nenhum favoritado encontrado.
+                </Text>
+            ) : null}
+
             {favorites.length > 0 ? (
                 <FlatList
-                    data={favorites}
+                    data={filteredProducts}
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             onPress={() => handleItemPress(item.id)}
                         >
-                            <Item fetchProduct={fetchFavorites} data={item} likable />
+                            <Item
+                                fetchProduct={fetchFavorites}
+                                data={item}
+                                likable
+                            />
                         </TouchableOpacity>
                     )}
                     keyExtractor={(item) => item.id}
@@ -71,8 +98,10 @@ export default function Liked() {
                     numColumns={2}
                 />
             ) : (
-                <View style={tw`w-full h-full gap-y-4 justify-center items-center`}>
-                    <Image source={sadRobot} style={tw`w-32 h-32`}/>
+                <View
+                    style={tw`w-full h-full gap-y-4 justify-center items-center`}
+                >
+                    <Image source={sadRobot} style={tw`w-32 h-32`} />
                     <Text
                         style={tw`text-xl font-medium text-grayscale-100 text-center`}
                     >
@@ -81,8 +110,8 @@ export default function Liked() {
                     <Text
                         style={tw`text-base font-medium text-grayscale-60 text-center`}
                     >
-                        Selecione curtir em qualquer produto para {"\n"} salvá-lo
-                        em seus produtos curtidos.
+                        Selecione curtir em qualquer produto para {"\n"}{" "}
+                        salvá-lo em seus produtos curtidos.
                     </Text>
                 </View>
             )}

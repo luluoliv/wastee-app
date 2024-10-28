@@ -33,27 +33,26 @@ export default function Perfil() {
 
     const { user } = useUser();
 
+    const fetchData = async () => {
+        if (user?.user_type !== "seller") return;
+
+        setIsLoading(true);
+        try {
+            const sellerResponse = await getSellersByUserId(user?.id);
+
+            setSeller(sellerResponse);
+
+            const productsResponse = await getProductBySellerId(
+                sellerResponse.id
+            );
+            setProducts(productsResponse);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
     useEffect(() => {
-        const fetchData = async () => {
-            if (user?.user_type !== "seller") return;
-
-            setIsLoading(true);
-            try {
-                const sellerResponse = await getSellersByUserId(user?.id);
-
-                setSeller(sellerResponse);
-
-                const productsResponse = await getProductBySellerId(
-                    sellerResponse.id
-                );
-                setProducts(productsResponse);                
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
         fetchData();
     }, [user]);
 
@@ -85,7 +84,7 @@ export default function Perfil() {
                 {user?.user_type == "seller" ? null : (
                     <Button
                         loading={isLoading}
-                        onPress={() => router.replace("/sell-forms")}
+                        onPress={() => router.navigate("/sell-forms")}
                         icon="user-plus"
                         title="Quero me tornar um vendedor"
                         style={tw`bg-grayscale-100`}
@@ -123,7 +122,11 @@ export default function Perfil() {
                                                 )
                                             }
                                         >
-                                            <Item likable data={product} />
+                                            <Item
+                                                fetchProduct={fetchData}
+                                                likable
+                                                data={product}
+                                            />
                                         </TouchableOpacity>
                                     ))
                                 ) : (

@@ -4,22 +4,41 @@ import axios from "axios";
 export interface CommentResponse {
     id: string;
     user: string;
+    user_name: string;
     product: string;
     comment: string;
     rating: number;
     date: string;
+    formatted_time: string;
     time: string;
 }
 
-interface NewComment {
+export interface NewComment {
     user: string | undefined;
     product: string | undefined;
-    content: string;
+    comment: string;
+    rating: number;
 }
 
 export const getComments = async (productId: string): Promise<CommentResponse[]> => {
     try {
         const response = await apiService.get<CommentResponse[]>(`comments/?product=${productId}`);
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            throw new Error(
+                error.response.data.detail ||
+                    "Erro ao buscar os comentários. Tente novamente."
+            );
+        } else {
+            throw new Error("Erro desconhecido. Tente novamente.");
+        }
+    }
+};
+
+export const getCommentsBySellerId = async (sellerId: string): Promise<CommentResponse[]> => {
+    try {
+        const response = await apiService.get<CommentResponse[]>(`comments/?seller_id=${sellerId}`);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {

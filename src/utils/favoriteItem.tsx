@@ -10,7 +10,6 @@ export const favoriteItem = async (
     user: any,
     fetchProduct: () => Promise<void>
 ): Promise<FavoriteResponse | void> => {
-    
     try {
         let response;
 
@@ -23,20 +22,18 @@ export const favoriteItem = async (
                 user: user.id,
                 product: String(item.id),
             };
-            
+
             response = await addFavorite(favoriteData);
-            Alert.alert("Produto favoritado.");
-            
+
             fetchProduct();
         } else {
             const productId = String(item.id);
             response = await removeFavorite(productId);
-            Alert.alert("Produto desfavoritado.");
             fetchProduct();
         }
         return response;
     } catch (error: any) {
         Alert.alert("Error", error.message || "Um erro inesperado aconteceu.");
-        return undefined;
+        return;
     }
 };

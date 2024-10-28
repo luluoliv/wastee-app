@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { View, Text } from "react-native";
 import { useRouter } from "expo-router";
 import { Feather, FontAwesome } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 import tw from "../lib/tailwind";
-import { Comment } from "../data/items";
 import { formatDate } from "../utils/formatDate";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import Dropdown from "./dropdown";
 import ModalReport from "./modalReport";
+import { CommentResponse } from "../service/commentsService";
 
 interface ReviewProps {
-    comment: Comment;
+    comment: CommentResponse;
 }
 
 const Review: React.FC<ReviewProps> = ({ comment }) => {
@@ -46,7 +46,7 @@ const Review: React.FC<ReviewProps> = ({ comment }) => {
         {
             label: "Visitar perfil",
             icon: "user",
-            action: () => router.push(`/user/${comment.user}`),
+            action: () => router.push(`/user/${comment.user_name}`),
         },
         {
             label: "Compartilhar",
@@ -79,7 +79,7 @@ const Review: React.FC<ReviewProps> = ({ comment }) => {
                 </TouchableOpacity>
             </View>
             <Text style={tw`font-medium text-sm text-grayscale-60`}>
-                {comment.user} • {formatDate(comment.date)}, {comment.time}
+                {comment.user_name} • {formatDate(comment.date)}, {comment.formatted_time}
             </Text>
             <Text style={tw`font-normal text-base text-grayscale-100`}>
                 {comment.comment}

@@ -14,9 +14,9 @@ interface NewFavorite {
     product: string | undefined;
 }
 
-export const getFavorites = async (): Promise<FavoriteResponse[]> => {
+export const getFavorites = async (): Promise<ProductResponse[]> => {
     try {
-        const response = await apiService.get<FavoriteResponse[]>("favorites/");
+        const response = await apiService.get<ProductResponse[]>("favorites/");
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
