@@ -33,7 +33,7 @@ interface NewChat {
 }
 
 export interface NewChatResponse {
-    id: string;
+    chat: ChatResponse;
     message: string;
 }
 
@@ -98,9 +98,7 @@ export const getAllChats = async (): Promise<ChatResponse[]> => {
 };
 
 export const createChat = async (chat: NewChat): Promise<NewChatResponse> => {
-    try {
-        console.log(chat);
-        
+    try {        
         const response = await apiService.post<NewChatResponse>("chats/", chat);        
         return response.data;
     } catch (error) {        

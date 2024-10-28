@@ -15,6 +15,7 @@ export interface SellerResponse {
     city: string;
     neighborhood: string;
     created_at: string;
+    chat_id: string;
     user: UserResponse;
     products: ProductResponse[];
     comments: CommentResponse[];

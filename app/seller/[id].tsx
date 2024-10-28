@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+    ActivityIndicator,
+    Alert,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
 import tw from "@/src/lib/tailwind";
@@ -14,8 +21,13 @@ import ModalReport from "@/src/components/modalReport";
 
 import { getSellerById, SellerResponse } from "@/src/service/sellerService";
 import Avatar from "@/src/components/avatar";
+import { createChat } from "@/src/service/chatsService";
+import { useUser } from "@/src/contexts/UserContext";
+import Divider from "@/src/components/divider";
+import ReviewCard from "@/src/components/reviewCard";
 
 const Seller = () => {
+    const { user } = useUser();
     const { id } = useLocalSearchParams<{ id: string }>();
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [isReport, setIsReport] = useState(false);
@@ -32,8 +44,6 @@ const Seller = () => {
         try {
             const response = await getSellerById(id);
             setSeller(response);
-            console.log(response);
-            
         } catch (error: any) {
             setError(error.message || "Erro ao carregar produto.");
         } finally {
@@ -48,15 +58,15 @@ const Seller = () => {
     const talkToTheSeller = async () => {
         setLoadingChat(true);
         try {
-            if (seller?.product?.chat_id) {
-                router.push(`/chat/${product?.chat_id}`);
+            if (seller?.chat_id) {
+                router.push(`/chat/${seller?.chat_id}`);
             } else {
                 const response = await createChat({
-                    seller: product?.seller_id,
+                    seller: seller?.id,
                     buyer: user?.id,
                 });
-                                
-                router.push(`/chat/${response.id}`);
+
+                router.push(`/chat/${response.chat.id}`);
                 Alert.alert("Sucesso", response.message);
             }
         } catch (err: any) {
@@ -65,7 +75,6 @@ const Seller = () => {
             setLoadingChat(false);
         }
     };
-
 
     const options = [
         {
@@ -79,6 +88,17 @@ const Seller = () => {
             action: () => setIsReport(!isReport),
         },
     ];
+
+    if (loading) {
+        return (
+            <View
+                style={tw`flex-1 justify-center items-center bg-grayscale-20`}
+            >
+                <ActivityIndicator size="large" color="#0000ff" />
+                <Text style={tw`text-grayscale-80 mt-4`}>Carregando...</Text>
+            </View>
+        );
+    }
 
     return (
         <View style={tw`flex-1 py-10 bg-grayscale-20`}>
@@ -98,8 +118,7 @@ const Seller = () => {
                 visible={dropdownVisible}
                 onClose={() => setDropdownVisible(false)}
             />
-
-            <View style={tw`flex-col gap-y-5 px-5`}>
+            <ScrollView contentContainerStyle={tw`flex-col gap-y-5 px-5`}>
                 <View style={tw`flex-row items-center gap-x-3`}>
                     <Avatar user={seller?.user?.name} />
                     <View>
@@ -118,7 +137,7 @@ const Seller = () => {
                     style={tw`bg-grayscale-100`}
                     textStyle={tw`text-grayscale-20 font-semibold text-base`}
                     title="Converse com o vendedor"
-                    onPress={() => console.log("Converse com o vendedor")}
+                    onPress={talkToTheSeller}
                 />
 
                 <View style={tw`flex-row items-center justify-between`}>
@@ -165,16 +184,15 @@ const Seller = () => {
                             title="Ver produtos"
                             style={tw`bg-grayscale-40`}
                             onPress={() =>
-                                router.push(`/products-seller/${id}`)
+                                router.push(`/products-seller/${seller?.id}`)
                             }
                         />
                     )}
                 </View>
 
+                <Divider />
+
                 <View style={tw`flex-col gap-y-2`}>
-                    <Text style={tw`text-grayscale-80 font-medium text-xl`}>
-                        Localização
-                    </Text>
                     <View style={tw`flex-row justify-between`}>
                         <Text
                             style={tw`text-grayscale-60 font-medium text-base`}
@@ -212,9 +230,32 @@ const Seller = () => {
                         </Text>
                     </View>
                 </View>
-            </View>
+                <Divider />
 
-            <Footer />
+                <ScrollView
+                    horizontal
+                    pagingEnabled
+                    contentContainerStyle={tw`flex-row items-center gap-x-3`}
+                >
+                    {seller?.comments?.map((comment, index) => (
+                        <TouchableOpacity
+                            key={index}
+                            onPress={() =>
+                                router.push(`/reviews/${comment.user}`)
+                            }
+                            disabled={comment.comment?.length < 100}
+                        >
+                            <ReviewCard comment={comment} />
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
+                <Button
+                    style={tw`bg-grayscale-40`}
+                    title="Ver análises"
+                    onPress={() => router.push(`/reviews/${seller?.id}`)}
+                />
+                <Footer />
+            </ScrollView>
         </View>
     );
 };

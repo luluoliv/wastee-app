@@ -28,7 +28,6 @@ export default function Liked() {
         try {
             const response = await getFavorites();
             setFavorites(response);
-            console.log(response);
         } catch (err: any) {
             setError(err.message || "Erro ao carregar comentários.");
         } finally {

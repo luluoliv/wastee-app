@@ -27,7 +27,6 @@ const Password = () => {
 
         try {
             await setPassword({ password: data.password, email: data.email, user_id: id });
-            console.log(data);
             router.replace("/tutorial");
         } catch (error: any) {
             if (error.message) {

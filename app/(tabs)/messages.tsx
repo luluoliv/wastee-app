@@ -34,7 +34,6 @@ export default function Messages() {
         try {
             const response = await getAllChats();
             setChats(response);
-            console.log(response);
         } catch (err: any) {
             setError(err.message || "Erro ao carregar produtos.");
         } finally {

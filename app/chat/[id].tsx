@@ -34,9 +34,7 @@ const Chat = () => {
     
     const fetchChat = async () => {
         try {
-            const response = await getChatById(id);
-            console.log(response);
-            
+            const response = await getChatById(id);            
             setChat(response);
         } catch (err: any) {
             setError(err.message || "Erro ao carregar a conversa.");
@@ -53,6 +51,7 @@ const Chat = () => {
         try {
             await deleteChat(id);
             Alert.alert("Conversa deletada com sucesso!");
+            router.back()
             fetchChat();
         } catch (error: any) {
             Alert.alert(error.message);

@@ -11,6 +11,7 @@ import Review from "@/src/components/review";
 const Reviews = () => {
     const router = useRouter()
     const { id } = useLocalSearchParams<{ id: string }>();
+    
 
     const item = items.find((item) => id === item.seller);
 

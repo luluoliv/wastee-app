@@ -56,28 +56,26 @@ export const getProductById = async (
 export const getProductBySellerId = async (
     seller_id: string | undefined
 ): Promise<ProductResponse[]> => {
-    try {
-        const response = await apiService.get<ProductResponse[]>(
-            `products?seller_id=${seller_id}`
-        );
+    try {        
+        const response = await apiService.get<ProductResponse[]>(`products/`, {
+            params: { seller_id },
+        });
         return response.data;
     } catch (error) {
+        console.log(error);
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(
                 error.response.data.detail ||
-                    "Erro ao buscar produto. Tente novamente."
+                "Erro ao buscar produto. Tente novamente."
             );
         } else {
             throw new Error("Erro desconhecido. Tente novamente.");
         }
     }
 };
-
 export const getAllProducts = async (): Promise<ProductResponse[]> => {
     try {
         const response = await apiService.get<ProductResponse[]>("products/");
-        console.log(response.data);
-
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {

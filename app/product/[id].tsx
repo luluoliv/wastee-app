@@ -51,8 +51,6 @@ const Product = () => {
         setLoadingProduct(true);
         try {
             const response = await getProductById(id);
-            console.log(response);
-            
             setProduct(response);
         } catch (err: any) {
             setError(err.message || "Erro ao carregar produto.");
@@ -85,15 +83,19 @@ const Product = () => {
         setLoadingChat(true);
         try {
             if (product?.chat_id) {
-                router.push(`/chat/${product?.chat_id}`);
+                router.push(`/chat/${product.chat_id}`);
             } else {
                 const response = await createChat({
                     seller: product?.seller_id,
                     buyer: user?.id,
                 });
-                                
-                router.push(`/chat/${response.id}`);
-                Alert.alert("Sucesso", response.message);
+                    
+                if (response && response.chat.id) {
+                    router.push(`/chat/${response.chat.id}`);
+                    Alert.alert("Sucesso", response.message);
+                } else {
+                    Alert.alert("Erro", "Não foi possível iniciar o chat.");
+                }
             }
         } catch (err: any) {
             Alert.alert("Erro", err.message);
@@ -101,6 +103,7 @@ const Product = () => {
             setLoadingChat(false);
         }
     };
+    
 
     const maxLengthDescription = 150;
 
