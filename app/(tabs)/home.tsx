@@ -94,7 +94,7 @@ export default function Home() {
         }
     };
 
-    const handleItemPress = (id: string) => {
+    const handleItemPress = (id: string | undefined) => {
         router.push(`/product/${id}`);
         updateRecentSearches();
     };
@@ -203,6 +203,7 @@ export default function Home() {
                         </TouchableOpacity>
                     )}
                     keyExtractor={(item) => item.id}
+                    contentContainerStyle={tw`w-full h-full`}
                     columnWrapperStyle={tw`justify-between gap-2`}
                     numColumns={2}
                 />

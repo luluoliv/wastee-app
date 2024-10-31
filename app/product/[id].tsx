@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import {
     View,
     Text,
-    Image,
     ScrollView,
     TouchableOpacity,
     ActivityIndicator,
     Alert,
 } from "react-native";
+
+import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 
@@ -143,6 +144,17 @@ const Product = () => {
         return <Text style={tw`text-grayscale-100`}>Item não encontrado.</Text>;
     }
 
+    if (error) {
+        return (
+            <View
+                style={tw`flex-1 justify-center items-center bg-grayscale-20`}
+            >
+                <Text style={tw`text-red-500`}>{error}</Text>
+                <Button title="Tentar novamente" onPress={fetchProduct} />
+            </View>
+        );
+    }
+
     const truncatedDescription =
         product.description.length > maxLengthDescription
             ? product.description.slice(0, maxLengthDescription) + "..."
@@ -169,13 +181,16 @@ const Product = () => {
 
             <ScrollView contentContainerStyle={tw`w-full px-4`}>
                 <ScrollView horizontal pagingEnabled>
-                    {product?.images?.map((image, index) => (
-                        <Image
-                            key={index}
-                            source={{ uri: image }}
-                            style={tw`w-[353px] h-[353px] rounded-xl mr-2`}
-                        />
-                    ))}
+                    {product?.images?.map((image, index) => {
+                        return (
+                            <Image
+                                key={index}
+                                source={{ uri: image.external_image_url ? image.external_image_url : image.image }}
+                                contentFit="contain"
+                                style={tw`w-[353px] h-[353px] rounded-xl mr-2`}
+                            />
+                        );
+                    })}
                 </ScrollView>
 
                 <View style={tw`flex-col gap-y-5`}>
@@ -320,7 +335,7 @@ const Product = () => {
                             <Text
                                 style={tw`text-grayscale-100 font-medium text-base`}
                             >
-                                {product.neighbourhood ||
+                                {product.neighborhood ||
                                     "Bairro não disponível"}
                             </Text>
                         </View>

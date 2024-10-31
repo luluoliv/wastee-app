@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
 import Header from "@/src/components/header";
 import tw from "@/src/lib/tailwind";
-import { sellers } from "@/src/data/sellers";
-import { items } from "@/src/data/items";
 import Item from "@/src/components/item";
 import { getProductBySellerId, ProductResponse } from "@/src/service/productsService";
 
@@ -15,6 +13,7 @@ const ProductsSeller = () => {
 
     const [products, setProducts] = useState<ProductResponse[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     const handleItemPress = (id: string) => {
         router.push(`/product/${id}`);
@@ -24,10 +23,10 @@ const ProductsSeller = () => {
         try {
             setLoading(true);
             try {
-                const response = await getProductBySellerId(id);
+                const response = await getProductBySellerId(id);                
                 setProducts(response);
             } catch (error: any) {
-                Alert.alert(error.message || "Erro ao carregar produto.");
+                setError(error.message || "Erro ao carregar produto.")
             } finally {
                 setLoading(false);
             }
@@ -37,6 +36,27 @@ const ProductsSeller = () => {
     useEffect(() => {
         fetchProductsBySeller()
     }, []);
+
+    
+    if (loading) {
+        return (
+            <View
+                style={tw`flex-1 justify-center items-center bg-grayscale-20`}
+            >
+                <ActivityIndicator size="large" color={"#fff"} />
+            </View>
+        );
+    }
+
+    if (error) {
+        return (
+            <View
+                style={tw`flex-1 justify-center items-center bg-grayscale-20`}
+            >
+                <Text style={tw`text-red-500`}>{error}</Text>
+            </View>
+        );
+    }
 
     return (
         <View style={tw`flex-1 py-10 bg-grayscale-20`}>

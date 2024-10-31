@@ -12,11 +12,16 @@ export interface ProductResponse {
     favorited: boolean;
     rate: string;
     seller_name?: string;
-    seller_id?: string  | undefined;
+    seller_id?: string | undefined;
     state?: string;
     city?: string;
-    neighbourhood?: string;
-    images: string[];
+    neighborhood?: string;
+    images: ProductImageResponse[];
+}
+export interface ProductImageResponse {
+    id: string;
+    image: string;
+    external_image_url: string;
 }
 
 interface NewProduct {
@@ -56,7 +61,7 @@ export const getProductById = async (
 export const getProductBySellerId = async (
     seller_id: string | undefined
 ): Promise<ProductResponse[]> => {
-    try {        
+    try {
         const response = await apiService.get<ProductResponse[]>(`products/`, {
             params: { seller_id },
         });
@@ -66,7 +71,7 @@ export const getProductBySellerId = async (
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(
                 error.response.data.detail ||
-                "Erro ao buscar produto. Tente novamente."
+                    "Erro ao buscar produto. Tente novamente."
             );
         } else {
             throw new Error("Erro desconhecido. Tente novamente.");

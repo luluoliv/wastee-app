@@ -65,157 +65,157 @@ export default function Perfil() {
                     )
                 }
             />
-            <View style={tw`px-5 gap-y-5`}>
-                <View style={tw`flex-row items-center gap-x-3`}>
-                    <Avatar user={user?.name} />
-                    <View style={tw`flex flex-col`}>
-                        <Text
-                            style={tw`font-semibold text-xl text-left text-grayscale-100`}
-                        >
-                            {user?.name}
-                        </Text>
-                        <Text
-                            style={tw`font-medium text-base text-left text-grayscale-100`}
-                        >
-                            {user?.email}
-                        </Text>
-                    </View>
-                </View>
-                {user?.user_type == "seller" ? null : (
-                    <Button
-                        loading={isLoading}
-                        onPress={() => router.navigate("/sell-forms")}
-                        icon="user-plus"
-                        title="Quero me tornar um vendedor"
-                        style={tw`bg-grayscale-100`}
-                        textStyle={tw`text-grayscale-20`}
-                    />
-                )}
-                {user?.user_type == "seller" && (
-                    <>
-                        <Divider />
-                        <View style={tw`flex-row items-center justify-between`}>
+            <ScrollView>
+                <View style={tw`px-5 gap-y-5`}>
+                    <View style={tw`flex-row items-center gap-x-3`}>
+                        <Avatar user={user?.name} />
+                        <View style={tw`flex flex-col`}>
                             <Text
-                                style={tw`font-medium text-grayscale-80 text-xl`}
+                                style={tw`font-semibold text-xl text-left text-grayscale-100`}
                             >
-                                Produtos
+                                {user?.name}
                             </Text>
                             <Text
-                                style={tw`font-medium text-grayscale-60 text-xl`}
+                                style={tw`font-medium text-base text-left text-grayscale-100`}
                             >
-                                ({products.length})
+                                {user?.email}
                             </Text>
                         </View>
-                        <View style={tw`flex flex-col gap-y-3`}>
-                            <ScrollView
-                                horizontal
-                                pagingEnabled
-                                contentContainerStyle={tw`flex-row items-center gap-x-3`}
+                    </View>
+                    {user?.user_type == "seller" ? null : (
+                        <Button
+                            loading={isLoading}
+                            onPress={() => router.navigate("/sell-forms")}
+                            icon="user-plus"
+                            title="Quero me tornar um vendedor"
+                            style={tw`bg-grayscale-100`}
+                            textStyle={tw`text-grayscale-20`}
+                        />
+                    )}
+                    {user?.user_type == "seller" && (
+                        <>
+                            <Divider />
+                            <View
+                                style={tw`flex-row items-center justify-between`}
                             >
-                                {products.length > 0 ? (
-                                    products.map((product, index) => (
-                                        <TouchableOpacity
-                                            key={index}
-                                            onPress={() =>
-                                                router.push(
-                                                    `/product/${product.id}`
-                                                )
-                                            }
+                                <Text
+                                    style={tw`font-medium text-grayscale-80 text-xl`}
+                                >
+                                    Produtos
+                                </Text>
+                                <Text
+                                    style={tw`font-medium text-grayscale-60 text-xl`}
+                                >
+                                    ({products.length})
+                                </Text>
+                            </View>
+                            <View style={tw`flex flex-col gap-y-3`}>
+                                <ScrollView
+                                    horizontal
+                                    pagingEnabled
+                                    contentContainerStyle={tw`flex-row items-center gap-x-3`}
+                                >
+                                    {products.length > 0 ? (
+                                        products.map((product, index) => (
+                                            <TouchableOpacity
+                                                key={index}
+                                                onPress={() =>
+                                                    router.push(
+                                                        `/product/${product.id}`
+                                                    )
+                                                }
+                                            >
+                                                <Item
+                                                    fetchProduct={fetchData}
+                                                    likable
+                                                    data={product}
+                                                />
+                                            </TouchableOpacity>
+                                        ))
+                                    ) : (
+                                        <Text
+                                            style={tw`text-grayscale-60 font-medium text-base`}
                                         >
-                                            <Item
-                                                fetchProduct={fetchData}
-                                                likable
-                                                data={product}
-                                            />
-                                        </TouchableOpacity>
-                                    ))
-                                ) : (
+                                            Nenhum produto postado ainda.
+                                        </Text>
+                                    )}
+                                </ScrollView>
+                                {products.length > 0 && (
+                                    <Button
+                                        title="Ver produtos"
+                                        style={tw`bg-grayscale-40`}
+                                        textStyle={tw`text-grayscale-100`}
+                                        onPress={() =>
+                                            router.push(
+                                                `/products-seller/${seller.id}`
+                                            )
+                                        }
+                                    />
+                                )}
+
+                                <Button
+                                    loading={isLoading}
+                                    onPress={() =>
+                                        router.replace(
+                                            `/new-product/${user.id}`
+                                        )
+                                    }
+                                    icon="plus-circle"
+                                    title="Adicionar produto"
+                                    style={tw`bg-grayscale-100`}
+                                    textStyle={tw`text-grayscale-20`}
+                                />
+                            </View>
+                            <Divider />
+                            <View style={tw`flex-col gap-y-2`}>
+                                <Text
+                                    style={tw`text-grayscale-80 font-medium text-xl`}
+                                >
+                                    Localização
+                                </Text>
+                                <View style={tw`flex-row justify-between`}>
                                     <Text
                                         style={tw`text-grayscale-60 font-medium text-base`}
                                     >
-                                        Nenhum produto postado ainda.
+                                        Estado
                                     </Text>
-                                )}
-                            </ScrollView>
-                            {products.length > 0 && (
-                                <Button
-                                    title="Ver produtos"
-                                    style={tw`bg-grayscale-40`}
-                                    textStyle={tw`text-grayscale-100`}
-                                    onPress={() =>
-                                        router.push(
-                                            `/products-seller/${user.id}`
-                                        )
-                                    }
-                                />
-                            )}
+                                    <Text
+                                        style={tw`text-grayscale-100 font-medium text-base`}
+                                    >
+                                        {seller?.state}
+                                    </Text>
+                                </View>
+                                <View style={tw`flex-row justify-between`}>
+                                    <Text
+                                        style={tw`text-grayscale-60 font-medium text-base`}
+                                    >
+                                        Cidade
+                                    </Text>
+                                    <Text
+                                        style={tw`text-grayscale-100 font-medium text-base`}
+                                    >
+                                        {seller?.city}
+                                    </Text>
+                                </View>
+                                <View style={tw`flex-row justify-between`}>
+                                    <Text
+                                        style={tw`text-grayscale-60 font-medium text-base`}
+                                    >
+                                        Bairro
+                                    </Text>
+                                    <Text
+                                        style={tw`text-grayscale-100 font-medium text-base`}
+                                    >
+                                        {seller?.neighborhood}
+                                    </Text>
+                                </View>
+                            </View>
+                        </>
+                    )}
+                </View>
 
-                            <Button
-                                loading={isLoading}
-                                onPress={() =>
-                                    router.replace(`/new-product/${user.id}`)
-                                }
-                                icon="plus-circle"
-                                title="Adicionar produto"
-                                style={tw`bg-grayscale-100`}
-                                textStyle={tw`text-grayscale-20`}
-                            />
-                        </View>
-                        <Divider />
-                        <View style={tw`flex-col gap-y-2`}>
-                            <Text
-                                style={tw`text-grayscale-80 font-medium text-xl`}
-                            >
-                                Localização
-                            </Text>
-                            <View style={tw`flex-row justify-between`}>
-                                <Text
-                                    style={tw`text-grayscale-60 font-medium text-base`}
-                                >
-                                    Estado
-                                </Text>
-                                <Text
-                                    style={tw`text-grayscale-100 font-medium text-base`}
-                                >
-                                    {seller?.state}
-                                </Text>
-                            </View>
-                            <View style={tw`flex-row justify-between`}>
-                                <Text
-                                    style={tw`text-grayscale-60 font-medium text-base`}
-                                >
-                                    Cidade
-                                </Text>
-                                <Text
-                                    style={tw`text-grayscale-100 font-medium text-base`}
-                                >
-                                    {seller?.city}
-                                </Text>
-                            </View>
-                            <View style={tw`flex-row justify-between`}>
-                                <Text
-                                    style={tw`text-grayscale-60 font-medium text-base`}
-                                >
-                                    Bairro
-                                </Text>
-                                <Text
-                                    style={tw`text-grayscale-100 font-medium text-base`}
-                                >
-                                    {seller?.neighborhood}
-                                </Text>
-                            </View>
-                        </View>
-                    </>
-                )}
-            </View>
-
-            <Footer />
+                <Footer />
+            </ScrollView>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    text: {
-        fontFamily: "Poppins_600SemiBold_Italic",
-    },
-});

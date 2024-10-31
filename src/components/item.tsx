@@ -20,8 +20,7 @@ interface ItemProps {
 
 const Item: React.FC<ItemProps> = ({ data, likable, fetchProduct }) => {
     const router = useRouter();
-    const { user } = useUser();
-
+    const { user } = useUser();        
 
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [isReport, setIsReport] = useState(false);
@@ -37,7 +36,7 @@ const Item: React.FC<ItemProps> = ({ data, likable, fetchProduct }) => {
         {
             label: "Visitar vendedor",
             icon: "user",
-            action: () => data?.id && router.push(`/seller/${data.id}`),
+            action: () => data?.id && router.push(`/seller/${data.seller_id}`),
         },
         {
             label: "Compartilhar",
@@ -73,7 +72,7 @@ const Item: React.FC<ItemProps> = ({ data, likable, fetchProduct }) => {
                 <Image
                     source={{
                         uri:
-                            data.images?.[0] ??
+                            data.images[0]?.external_image_url ??
                             "https://via.placeholder.com/150",
                     }}
                     style={tw`w-[168px] h-[168px] rounded-xl`}
