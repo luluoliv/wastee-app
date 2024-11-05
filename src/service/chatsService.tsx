@@ -38,9 +38,9 @@ export interface NewChatResponse {
 }
 
 interface NewMessage {
-    chat: string;
-    sender: string;
-    message: string;
+    chat: string | undefined;
+    sender: string | undefined;
+    message: string | undefined;
 }
 
 export const getChatById = async (chatId: string): Promise<ChatResponse> => {

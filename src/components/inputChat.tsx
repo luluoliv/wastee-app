@@ -1,7 +1,6 @@
-import { View, TextInput, Text, TouchableOpacity } from "react-native";
+import { TextInput } from "react-native";
 import React, { useState } from "react";
 import tw from "../lib/tailwind";
-import { Feather } from "@expo/vector-icons";
 
 export interface InputChatProps {
     placeholder: string;
@@ -19,27 +18,22 @@ const InputChat: React.FC<InputChatProps> = ({
     const [inputValue, setInputValue] = useState(value || "");
 
     const handleSend = () => {
-        if (inputValue.trim()) {
-            onSend?.(inputValue.trim());
+        if (inputValue.trim() && onSend) {
+            onSend(inputValue.trim());
             setInputValue("");
         }
     };
 
     return (
-        <View
-            style={tw`flex flex-row items-center border border-grayscale-60 rounded-xl px-4 py-2`}
-        >
-            <TextInput
-                value={inputValue}
-                onChangeText={(text) => {
-                    setInputValue(text);
-                    if (onChangeText) onChangeText(text);
-                }}
-                placeholder={placeholder}
-                placeholderTextColor={tw.color("text-grayscale-60")}
-                style={tw`flex-1 bg-transparent text-grayscale-100 text-base font-medium`}
-            />
-        </View>
+        <TextInput
+            value={value}
+            onChangeText={onChangeText}
+            onSubmitEditing={handleSend}
+            placeholder={placeholder}
+            placeholderTextColor={tw.color("text-grayscale-60")}
+            style={tw`flex-1 bg-transparent text-grayscale-100 text-base font-medium rounded-xl border border-grayscale-60 px-4 py-2`}
+            textAlignVertical="center"
+        />
     );
 };
 

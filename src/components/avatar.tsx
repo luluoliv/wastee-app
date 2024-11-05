@@ -4,12 +4,15 @@ import { getRandomColor } from "../utils/getRandomColor";
 import tw from "../lib/tailwind";
 
 interface AvatarProps {
-    user?: string; 
+    user?: string;
+    size?: number;
 }
 
-const Avatar: React.FC<AvatarProps> = ({ user }) => {
+const Avatar: React.FC<AvatarProps> = ({ user, size = 56 }) => {
     const backgroundColor = getRandomColor();
-    
+    const fontSize = size * 0.45; 
+    const padding = size * 0.15;
+
     const initials = user
         ? user
             .split(" ")
@@ -20,8 +23,25 @@ const Avatar: React.FC<AvatarProps> = ({ user }) => {
         : "??";
 
     return (
-        <View style={[tw`w-14 h-14 rounded-full`, { backgroundColor }]}>
-            <Text style={tw`p-2 font-medium text-center text-3xl text-grayscale-20`}>
+        <View
+            style={[
+                tw`rounded-full justify-center items-center`,
+                {
+                    backgroundColor,
+                    width: size,
+                    height: size,
+                },
+            ]}
+        >
+            <Text
+                style={{
+                    fontSize,
+                    padding,
+                    color: tw.color("text-grayscale-20"),
+                    fontWeight: "500",
+                    textAlign: "center",
+                }}
+            >
                 {initials}
             </Text>
         </View>

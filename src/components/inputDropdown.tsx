@@ -24,12 +24,12 @@ const InputDropdown: React.FC<InputDropdownProps> = ({
                     inputIOS: {
                         ...tw`w-full border p-3 rounded-lg bg-transparent text-base border-grayscale-60 text-grayscale-60`,
                         paddingRight: 30,
-                        textAlignVertical: "center",
+                        verticalAlign: "center",
                     },
                     inputAndroid: {
                         ...tw`w-full border p-3 rounded-lg bg-transparent text-base border-grayscale-60 text-grayscale-60`,
                         paddingRight: 30,
-                        textAlignVertical: "center",
+                        verticalAlign: "center",
                     },
                 }}
                 placeholder={{
