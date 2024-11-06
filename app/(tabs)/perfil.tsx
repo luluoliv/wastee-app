@@ -156,8 +156,8 @@ export default function Perfil() {
                                 <Button
                                     loading={isLoading}
                                     onPress={() =>
-                                        router.replace(
-                                            `/new-product/${user.id}`
+                                        router.push(
+                                            `/new-product/${seller.id}`
                                         )
                                     }
                                     icon="plus-circle"

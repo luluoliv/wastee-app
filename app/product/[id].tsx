@@ -79,6 +79,7 @@ const Product = () => {
 
         fetchComments();
     }, []);
+    
 
     const talkToTheSeller = async () => {
         setLoadingChat(true);
@@ -181,11 +182,11 @@ const Product = () => {
 
             <ScrollView contentContainerStyle={tw`w-full px-4`}>
                 <ScrollView horizontal pagingEnabled>
-                    {product?.images?.map((image, index) => {
+                    {product?.images?.map((image, index) => {                        
                         return (
                             <Image
                                 key={index}
-                                source={{ uri: image.external_image_url ? image.external_image_url : image.image }}
+                                source={{ uri: image.image ? image.image : image.external_image_url }}
                                 contentFit="contain"
                                 style={tw`w-[353px] h-[353px] rounded-xl mr-2`}
                             />

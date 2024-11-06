@@ -32,6 +32,10 @@ interface NewProduct {
     category: string;
     category_id: number;
 }
+interface NewProductResponse {
+    message: string;
+    product: ProductResponse;
+}
 
 interface UpdateProduct {
     id: number;
@@ -96,16 +100,11 @@ export const getAllProducts = async (): Promise<ProductResponse[]> => {
 
 export const createProduct = async (
     product: NewProduct | FormData
-): Promise<ProductResponse> => {
+): Promise<NewProductResponse> => {
     try {
-        const response = await apiService.post<ProductResponse>(
+        const response = await apiService.post<NewProductResponse>(
             "products/",
-            product,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            }
+            product
         );
         return response.data;
     } catch (error) {

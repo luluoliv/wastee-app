@@ -22,7 +22,7 @@ export interface NewComment {
 
 export const getComments = async (productId: string): Promise<CommentResponse[]> => {
     try {
-        const response = await apiService.get<CommentResponse[]>(`comments/?product=${productId}`);
+        const response = await apiService.get<CommentResponse[]>(`comments/?product_id=${productId}`);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {

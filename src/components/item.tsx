@@ -15,12 +15,12 @@ import { useUser } from "../contexts/UserContext";
 interface ItemProps {
     data: ProductResponse;
     likable?: boolean;
-    fetchProduct: ()=> Promise<void>
+    fetchProduct: () => Promise<void>;
 }
 
 const Item: React.FC<ItemProps> = ({ data, likable, fetchProduct }) => {
     const router = useRouter();
-    const { user } = useUser();        
+    const { user } = useUser();
 
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [isReport, setIsReport] = useState(false);
@@ -71,9 +71,10 @@ const Item: React.FC<ItemProps> = ({ data, likable, fetchProduct }) => {
             <View style={tw`relative w-full`}>
                 <Image
                     source={{
-                        uri:
-                            data.images[0]?.external_image_url ??
-                            "https://via.placeholder.com/150",
+                        uri: data.images[0]?.external_image_url
+                            ? data.images[0]?.external_image_url
+                            : data.images[0]?.image ??
+                              "https://via.placeholder.com/150",
                     }}
                     style={tw`w-[168px] h-[168px] rounded-xl`}
                     resizeMode="cover"
