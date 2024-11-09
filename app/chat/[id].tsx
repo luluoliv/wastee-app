@@ -26,6 +26,7 @@ import { useUser } from "@/src/contexts/UserContext";
 import { formatDate } from "@/src/utils/formatDate";
 import Message from "@/src/components/message";
 import Avatar from "@/src/components/avatar";
+import { groupMessagesByDate } from "@/src/utils/groupMessagesByDate ";
 
 const Chat = () => {
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -100,6 +101,8 @@ const Chat = () => {
         },
     ];
 
+    const groupedMessages = chat ? groupMessagesByDate(chat.messages) : [];
+
     return (
         <View style={tw`flex-1 py-10 bg-grayscale-20`}>
             <Header
@@ -119,7 +122,9 @@ const Chat = () => {
                 visible={dropdownVisible}
                 onClose={() => setDropdownVisible(false)}
             />
-            <KeyboardAwareScrollView contentContainerStyle={tw`flex-grow gap-y-3 p-5`}>
+            <KeyboardAwareScrollView
+                contentContainerStyle={tw`flex-grow gap-y-3 p-5`}
+            >
                 <View style={tw`flex-1 gap-3`}>
                     <View style={tw`flex-row gap-x-3 px-3`}>
                         <Feather name="info" size={24} color={"#787f8d"} />
@@ -137,12 +142,23 @@ const Chat = () => {
                         {loading ? (
                             <ActivityIndicator size="large" color="#000" />
                         ) : (
-                            chat?.messages.map((message, index) => (
-                                <Message key={index} message={message} />
+                            groupedMessages.map((message, index) => (
+                                <View key={index} style={tw`gap-y-3`}>
+                                    <Text
+                                        style={tw`text-center text-sm text-grayscale-60 my-2`}
+                                    >
+                                        {message.date}
+                                    </Text>
+                                    {message.messages.map((message, index) => (
+                                        <Message
+                                            key={index}
+                                            message={message}
+                                        />
+                                    ))}
+                                </View>
                             ))
                         )}
                     </View>
-                    <Avatar size={46} user={user?.name} />
                 </View>
             </KeyboardAwareScrollView>
 
@@ -161,9 +177,10 @@ const Chat = () => {
                     <TouchableOpacity
                         style={tw`bg-grayscale-100 rounded-full p-3`}
                         onPress={() => sendMessage(inputValue)}
+                        disabled={loadingSendMessage}
                     >
                         {loadingSendMessage ? (
-                            <ActivityIndicator size="small" color="#0000" />
+                            <ActivityIndicator size="small" color="#000" />
                         ) : (
                             <Feather name="send" size={20} color={"#0c0c11"} />
                         )}

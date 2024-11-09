@@ -106,9 +106,7 @@ export const createSeller = async (seller: NewSeller): Promise<NewSeller> => {
             },
         });
         return response.data;
-    } catch (error: any) {
-        console.error(error.response.data);
-        
+    } catch (error: any) {        
         if (axios.isAxiosError(error) && error.response) {
             throw new Error(
                 error.response.data.cpf  ||

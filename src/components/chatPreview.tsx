@@ -75,7 +75,7 @@ const ChatPreview: React.FC<ChatPreviewProps> = ({
                         <Text
                             style={tw`text-base font-medium text-grayscale-100`}
                         >
-                            {data.seller_name}
+                            {data.last_message?.sender_name}
                         </Text>
 
                         {data.last_message?.sender_id === user?.id ? (
