@@ -12,6 +12,7 @@ import { FavoriteResponse, getFavorites } from "@/src/service/favoriteService";
 
 import { sadRobot } from "@/src/utils/imports";
 import { ProductResponse } from "@/src/service/productsService";
+import StaticAd from "@/src/components/staticAd";
 
 export default function Liked() {
     const router = useRouter();
@@ -96,6 +97,13 @@ export default function Liked() {
                     keyExtractor={(item) => item.id}
                     columnWrapperStyle={tw`justify-between mb-4`}
                     numColumns={2}
+                    ListHeaderComponent={() => (
+                        <StaticAd
+                            image="https://i.pinimg.com/736x/05/c0/82/05c08284e81ef172df3610c2e947b9a9.jpg"
+                            title="Procurando novos looks? Baixe agora."
+                            url="https://m.shein.com/br/"
+                        />
+                    )}
                 />
             ) : (
                 <View

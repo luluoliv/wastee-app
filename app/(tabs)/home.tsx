@@ -20,6 +20,7 @@ import {
     getAllCategories,
 } from "@/src/service/categoriesService";
 import { COLORS } from "@/src/utils/colors";
+import StaticAd from "@/src/components/staticAd";
 
 export default function Home() {
     const router = useRouter();
@@ -231,6 +232,19 @@ export default function Home() {
                     keyExtractor={(item) => item.id}
                     columnWrapperStyle={tw`justify-between mb-4`}
                     numColumns={2}
+                    ListHeaderComponent={() => (
+                        <StaticAd
+                            image="https://m.media-amazon.com/images/G/01/AdProductsWebsite/images/campaigns/primeVideo/PVCommercialVideoPoster.jpg"
+                            title="Confira nossas promoções!"
+                            url="https://www.google.com/url?sa=i&url=https%3A%2F%2Fadvertising.amazon.com%2Fpt-br%2Fproducts%2Fprime-video-ads&psig=AOvVaw3Rs4o2a1oNtBt3t8wKCsvm&ust=1732469930229000&source=images&cd=vfe&opi=89978449&ved=0CBcQjhxqFwoTCKChlcj_8okDFQAAAAAdAAAAABAE"
+                        />
+                    )}
+                    ListFooterComponent={() => (
+                        <StaticAd
+                            image="https://www.targetspot.com/wp-content/uploads/2019/10/Deezer-jpg.webp"
+                            url="https://www.deezer.com/br/"
+                        />
+                    )}
                 />
             )}
         </View>
